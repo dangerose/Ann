@@ -1,0 +1,19 @@
+{
+  "name": "ann",
+  "version": "1.0.0",
+  "description": "ARE YOU READY!\r 我们的征途是星辰大海",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dangerose/Ann.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dangerose/Ann/issues"
+  },
+  "homepage": "https://github.com/dangerose/Ann#readme"
+}
