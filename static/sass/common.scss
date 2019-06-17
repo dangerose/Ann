@@ -1,6 +1,7 @@
 html, body, div, p, ul, li, dl, dt, dd, h1, h2, h3, h4, h5, h6, form, input, select, button, textarea, iframe, table, th, td { 
     margin: 0; 
     padding: 0; 
+    box-sizing: border-box;
 }
 
 html {
@@ -31,4 +32,10 @@ a:link {
 a:hover {
     text-decoration: none;
     color: #56a7fa;
+}
+
+@for $i from 10 through 30 {
+    .f-#{$i} {
+        font-size: $i * 0.1rem;
+    }
 }

@@ -24,11 +24,11 @@ var nodemon    = require('gulp-nodemon');
 //
 
 //清空sass目录
-gulp.task('sass : emptyDir', function() {
+gulp.task('sass:emptyDir', function() {
     return del(['static/css/**']);
 });
 //编译sass
-gulp.task('sass : build', function() {
+gulp.task('sass:build', function() {
     return gulp.src('static/sass/**/*.scss')
         .pipe(sourcemaps.init())
         .pipe(sass())
@@ -40,9 +40,9 @@ gulp.task('sass : build', function() {
         .pipe(gulp.dest('static/css'));
 });
 //监听sass
-gulp.task('sass : watch', function() {
-    run('sass : emptyDir', 'sass : build')
+gulp.task('sass:watch', function() {
+    run('sass:emptyDir', 'sass:build')
     gulp.watch('static/sass/**/*.scss', function(e) {
-        run('sass : emptyDir', 'sass : build')
+        run('sass:emptyDir', 'sass:build')
     });
 });
