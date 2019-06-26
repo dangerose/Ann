@@ -1,0 +1,11 @@
+{
+    "Response": {
+        "protocol": "HTTP/1.1",
+        "statuscode": 200,
+        "Expires": "now + 3600000",
+        "Cache-Control": "max-age=3600000",
+        "Content-Type": "text/html; charset=utf-8",
+        "Connection": "keep-alive",
+        "bodyfrom": "www/index.html"
+    }
+}

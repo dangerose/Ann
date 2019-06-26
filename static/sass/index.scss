@@ -1,0 +1,53 @@
+$menu-width: 270px;
+
+body {
+    
+}
+
+.menu {
+    width: $menu-width;
+    padding-left: 10px;
+    overflow: auto;
+    text-align: left;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    height: 100%;
+    background-color: #fff;
+    padding: 20px 0 0 10px;
+}
+
+.content {
+    height: 100%;
+    margin: 0 0 0 $menu-width;
+    top: 0;
+    padding: 20px 50px 25px 40px;
+
+    img {
+        border: 3px solid #fff;
+        margin: 0 6px 9px 0;
+        cursor: pointer;
+    }
+}
+
+.menu-title_logo {
+    width: auto;
+	height: auto;
+	max-width: 100%;
+	max-height: 100%;
+}
+
+.menu-cont {
+    padding: 30px 50px 25px 5px;
+    ul {
+        padding: 0 0 1rem 0;
+        /* 一级节点 */
+        li.menu-cont_title {
+        }
+        /* 二级节点 */
+        li:not(.menu-cont_title) {
+            padding-left: 10px;
+        }
+    }
+}
