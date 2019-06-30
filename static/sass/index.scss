@@ -31,6 +31,38 @@ body {
     }
 }
 
+.content-title {
+    text-align: right;
+    margin: 0 0 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.content-title_login {
+    color: #fff!important;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 8px 15px;
+    margin: 0 0 10px;
+    box-sizing: border-box;
+    display: inline-block;
+    min-width: 70px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    transition: background-color 200ms ease-in-out;
+    border: none;
+}
+
+.content-title_logined {
+    padding: 8px 15px;
+    margin: 0 0 10px;
+    color: white;
+    border: none;
+    font-weight: bold;
+    font-size: 1.5rem;
+    transition: background-color 200ms ease-in-out;
+}
+
 .menu-title_logo {
     width: auto;
 	height: auto;
@@ -42,6 +74,7 @@ body {
     padding: 30px 50px 25px 5px;
     ul {
         padding: 0 0 1rem 0;
+        margin: 0;
         /* 一级节点 */
         li.menu-cont_title {
         }
@@ -49,5 +82,90 @@ body {
         li:not(.menu-cont_title) {
             padding-left: 10px;
         }
+        p {
+            margin: 0;
+        }
     }
 }
+
+.login_logobox {
+    background-color: rgb(66, 66, 66);
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 25px;
+    border-radius: 50%;
+}
+
+.login_logo {
+    font-size: 20px;
+    top: calc(50% - 11px);
+    color: rgb(245, 229, 56);
+}
+
+.login-btn {
+    transition: background-color 200ms ease-in-out;
+    color: white;
+    padding: 8px 15px;
+    margin: 20px 0 0;
+    border: none;
+    outline: none;
+}
+
+.dialog__content {
+    width: auto;
+    padding: 40px 30px 48px;
+    border-radius: 4px;
+
+    > .input-group {
+        margin-bottom: 10px;
+    }
+}
+
+.blue {
+    background-color: rgba(51, 122, 183, 1);
+    &:hover {
+        background-color: rgba(51, 122, 183, 0.8);
+        color: white;
+    }
+    &:focus {
+        background-color: rgba(51, 122, 183, 0.8);
+        color: white;
+    }
+}
+
+.green {
+    background-color: rgb(90, 184, 92);
+    &:hover {
+        background-color: rgba(90, 184, 92, 0.8)!important;
+        color: white!important;
+    }
+    &:focus {
+        background-color: rgba(90, 184, 92, 0.8)!important;
+        color: white!important;
+    }
+}
+
+.red {
+    background-color: rgb(217, 84, 79);
+    &:hover {
+        background-color: rgba(217, 84, 79, 0.8);
+        color: white;
+    }
+    &:focus {
+        background-color: rgba(217, 84, 79, 0.8);
+        color: white;
+    }
+}
+
+.black {
+    background-color: rgb(50, 50, 50);
+    &:hover {
+        background-color: rgba(50, 50, 50, 0.8);
+        color: white;
+    }
+    &:focus {
+        background-color: rgba(50, 50, 50, 0.8);
+        color: white;
+    }
+}
+
