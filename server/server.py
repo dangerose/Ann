@@ -27,7 +27,9 @@ class Application(tornado.web.Application):
 
 class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
-        return self.get_secure_cookie("username")
+        #return self.get_secure_cookie("username")
+        pass
+
 
 class MainHandler(BaseHandler):
     def get(self):
