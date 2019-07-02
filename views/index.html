@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../static/components/bootstrap-3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/components/DialogEffects/css/dialog.css">
     <link rel="stylesheet" href="../static/components/DialogEffects/css/dialog-cathy.css">
+    <link rel="stylesheet" href="../static/components/bootstrap-fileinput/css/fileinput.min.css">
 
     <link rel="stylesheet" href="../static/css/common.min.css">
     <link rel="stylesheet" href="../static/css/index.min.css">
@@ -133,7 +134,7 @@
         </div>
     </div>
     <div class="content">
-        <div class="content-title">
+        <div id="contentTitle" class="content-title d-n">
             <button id="btnShow" class="content-title_login blue" href="" data-dialog="somedialog" class="trigger">登
                 录</button>
             <div id="btnShow_logined" class="btn-group" style="display: none;">
@@ -207,6 +208,8 @@
             <img src="../static/img/th-69_9.jpg" alt="" height="133">
             <img src="../static/img/th-62_171212ektar-1090.jpg" alt="" height="133">
             <img src="../static/img/th-62_180114ektar-1140.jpg" alt="" height="133">
+
+            <input id="uploadImg" class="file" type="file">
         </div>
         <!-- 模态框（Modal） -->
         <div id="somedialog" class="dialog">
@@ -233,6 +236,8 @@
 </body>
 <script src="../static/components/jquery.min.js"></script>
 <script src="../static/components/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+<script src="../static/components/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="../static/components/bootstrap-fileinput/js/fileinput_locale_zh.js"></script>
 <script src="../static//components/DialogEffects/js/modernizr.custom.js"></script>
 <script src="../static//components/DialogEffects/js/classie.js"></script>
 <script src="../static//components/DialogEffects/js/dialogFx.js"></script>
