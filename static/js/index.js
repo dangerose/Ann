@@ -40,6 +40,17 @@
             $picZoom.show($img.attr('src'));
         });
 
+        // 图片删除事件
+        $contentImgs.delegate('.content-img_remove', 'click', function () {
+            var $iconRemove = $(this);
+            var $img = $iconRemove.parent().siblings('img');
+            var picId = $img.attr('data-picid');
+            console.log(picId);
+            $.get("http://134.175.55.52:8080/delete_img?picid=" + picId, function (data, status) {
+                alert("Data: " + data + "\nStatus: " + status);
+            });
+        });
+
         // hash 事件
         $(window).bind('hashchange', function () {
             var hash = window.location.hash.replace('#', '');
@@ -53,6 +64,15 @@
             dlg = new DialogFx(somedialog);
         dlgtrigger.addEventListener('click', dlg.toggle.bind(dlg));
 
+        // 密码输入框 enter 事件
+        var $inputPassword = $('[name=password]');
+        $inputPassword.on('keydown', function (e) {
+            if (e.keyCode == 13) {
+                // enter
+                $('#btnLogin').trigger('click');
+            }
+        });
+
         // login 登录事件
         var $btnLogin = $('#btnLogin');
         $btnLogin.on('click', function () {
@@ -61,6 +81,7 @@
             if ($username.val() === 'admin' && $password.val() === 'admin') {
                 // 登录成功
                 Storage.set('hasLogin', true, 24 * 60 * 60);
+                view.toViewOrEdit('edit'); // 显示上传和删除模块
                 view.changeBtnLogin('success');
                 view.changeBtnShow();
                 setTimeout(function () {
@@ -85,14 +106,34 @@
     var view = {
         // 查看视图 还是 修改视图
         toViewOrEdit: function (isEdit) {
+            var $uploadBox = $('#uploadBox');
             var $contentTitle = $('#contentTitle');
+            var $imgDelLayer = $('.content-img_layer');
+            // 是否修改视图
             if (isEdit) {
-                // 修改视图
+                // 显示登录工具栏
                 $contentTitle.removeClass('d-n');
+                // 判断是否登录
+                if (Storage.get('hasLogin')) {
+                    // 显示上传按钮
+                    $uploadBox.removeClass('d-n');
+                    // 显示图片删除按钮
+                    $imgDelLayer.removeClass('d-n');
+                }
+                else {
+                    // 隐藏上传按钮
+                    $uploadBox.addClass('d-n');
+                    // 隐藏图片删除按钮
+                    $imgDelLayer.addClass('d-n');
+                }
             }
             else {
-                // 查看视图
+                // 隐藏登录工具栏
                 $contentTitle.addClass('d-n');
+                // 隐藏上传按钮
+                $uploadBox.addClass('d-n');
+                // 隐藏图片删除按钮
+                $imgDelLayer.addClass('d-n');
             }
         },
         // 登录按钮
