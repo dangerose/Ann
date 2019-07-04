@@ -17,8 +17,8 @@ class Application(tornado.web.Application):
             (r"/", MainHandler),
             (r"/login", LoginHandler),
             (r"/logout", LogoutHandler),
-            (r"/upload", UploadHandler),
-            (r"/delete", DeleteHandler),
+            (r"/upload_img", UploadHandler),
+            (r"/delete_img", DeleteHandler),
             (r"/get_img_path", GetPathHandler),
         ]
         settings = dict(
@@ -59,22 +59,30 @@ class LogoutHandler(BaseHandler):
         pass
 
 class UploadHandler(BaseHandler):
-    def get(self, *args, **kwargs):
-        self.render('upload.html')
-
     def post(self, *args, **kwargs):
-        json_data = self.request.body
-        json_str = json_data.decode('utf8')
-        json_obj = json.loads(json_str)
-
-        menuId = json_obj.get('menuId')
-        picId = json_obj.get('picId')
-        file_img = self.request.files.get('newImg')
+        menuId = self.get_argument('menuId', '/')
+        picId = self.get_argument('picId', 'hello')
+        file_imgs = self.request.files['img']
+        menu_path = '../static/img/{0}'.format(menuId)
         save_to = '../static/img/{0}/{1}'.format(menuId, picId)
-        with open(save_to, 'wb') as f:
-            f.write(file_img['body'])
+        try:
+            if not os.path.exists(menu_path):
+                os.makedirs(menu_path)
+
+            for file_img in file_imgs:
+                with open(save_to, 'wb') as f:
+                    print('open ok')
+                    f.write(file_img["body"])
+                    print('write ok')
+                    self.finish({"status":"ok",
+                                  "msg": "操作成功"})
+                    print('upload img success')
+
+        except Exception as e:
+            self.finish({"status": "fail",
+                         "msg": str(e)}) 
+            print(e)
                     
-        self.redirect('/')
 
 
 class DeleteHandler(BaseHandler):
@@ -99,3 +107,4 @@ if __name__ == "__main__":
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
+
