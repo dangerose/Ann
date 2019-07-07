@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="../static/components/bootstrap-3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/components/DialogEffects/css/dialog.css">
     <link rel="stylesheet" href="../static/components/DialogEffects/css/dialog-cathy.css">
-    <link rel="stylesheet" href="../static/components/bootstrap-fileinput/css/fileinput.min.css">
+    <link rel="stylesheet" href="../static/components/file-upload/jquery.fileupload.css">
+    <!-- <link rel="stylesheet" href="../static/components/bootstrap-fileinput/css/fileinput.min.css"> -->
 
     <link rel="stylesheet" href="../static/css/common.min.css">
     <link rel="stylesheet" href="../static/css/index.min.css">
@@ -17,16 +18,16 @@
 <body>
     <div class="menu">
         <div class="menu-title">
-            <a href="">
+            <a href="javascript:;">
                 <img class="menu-title_logo" src="../static/img/logo.png" alt="主页LOGO">
             </a>
         </div>
-        <div class="menu-cont">
-            <a href="">
+        <div id="menu" class="menu-cont">
+            <a href="javascript:;">
             </a>
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu01">
+                    <a href="javascript:;">
                         <p class="f-20">建筑</p>
                         <p>Architecture</p>
                     </a>
@@ -34,8 +35,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu02">
+                    <a href="javascript:;">
                         <p class="f-20">景观</p>
                         <p>Landscape</p>
                     </a>
@@ -43,8 +44,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu03">
+                    <a href="javascript:;">
                         <p class="f-20">照明</p>
                         <p>Lighting</p>
                     </a>
@@ -52,8 +53,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu04">
+                    <a href="javascript:;">
                         <p class="f-20">酒店</p>
                         <p>Hotel</p>
                     </a>
@@ -61,8 +62,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu05">
+                    <a href="javascript:;">
                         <p class="f-20">民宿</p>
                         <p>Bed and Breakfast</p>
                     </a>
@@ -70,8 +71,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu06">
+                    <a href="javascript:;">
                         <p class="f-20">地产</p>
                         <p>Estate</p>
                     </a>
@@ -79,8 +80,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu07">
+                    <a href="javascript:;">
                         <p class="f-20">餐厅/娱乐</p>
                         <p>Restaurant/Entertainment</p>
                     </a>
@@ -88,8 +89,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu08">
+                    <a href="javascript:;">
                         <p class="f-20">商业/办公</p>
                         <p>Business/Office</p>
                     </a>
@@ -97,8 +98,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu09">
+                    <a href="javascript:;">
                         <p class="f-20">艺术</p>
                         <p>Art</p>
                     </a>
@@ -106,8 +107,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu10">
+                    <a href="javascript:;">
                         <p class="f-20">出版物</p>
                         <p>Publication</p>
                     </a>
@@ -115,8 +116,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu11">
+                    <a href="javascript:;">
                         <p class="f-20">航拍</p>
                         <p>Aerial</p>
                     </a>
@@ -124,8 +125,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu12">
+                    <a href="javascript:;">
                         <p class="f-20">摄影师简介</p>
                         <p>Brief introduction of photographer</p>
                     </a>
@@ -133,8 +134,8 @@
             </ul>
 
             <ul>
-                <li class="menu-cont_title">
-                    <a href="">
+                <li class="menu-cont_title" data-menuId="menu13">
+                    <a href="javascript:;">
                         <p class="f-20">联系方式</p>
                         <p>Contact</p>
                     </a>
@@ -144,7 +145,8 @@
     </div>
     <div class="content">
         <div id="contentTitle" class="content-title d-n">
-            <button id="btnShow" class="content-title_login blue" href="" data-dialog="somedialog" class="trigger">登
+            <button id="btnShow" class="content-title_login blue" href="javascript:;" data-dialog="somedialog"
+                class="trigger">登
                 录</button>
             <div id="btnShow_logined" class="btn-group" style="display: none;">
                 <button type="button" class="btn btn-default dropdown-toggle content-title_logined green"
@@ -152,55 +154,23 @@
                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span> admin <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" style="min-width: auto;">
-                    <li><a id="btnLogOut" href="#">登出</a></li>
+                    <li><a id="btnLogOut" href="javascript:;">登出</a></li>
                 </ul>
             </div>
         </div>
         <div id="contentImgs">
-            <div class="content-img_box"><img data-picid="picid001" class="content-img" src="../static/img/th-69_0.jpg" alt="" height="133">
+            <!-- <div class="content-img_box">
+                <img data-picId="picid001" class="content-img" src="../static/img/th-69_0.jpg" alt="" height="133">
                 <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div class="content-img_box"><img data-picid="picid002" class="content-img" src="../static/img/th-69_1.jpg" alt="" height="133">
-                <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div class="content-img_box"><img data-picid="picid003" class="content-img" src="../static/img/th-69_2.jpg" alt="" height="133">
-                <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div class="content-img_box"><img data-picid="picid004" class="content-img" src="../static/img/th-69_3.jpg" alt="" height="133">
-                <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div class="content-img_box"><img data-picid="picid005" class="content-img" src="../static/img/th-69_4.jpg" alt="" height="133">
-                <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div class="content-img_box"><img data-picid="picid006" class="content-img" src="../static/img/th-69_5.jpg" alt="" height="133">
-                <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div class="content-img_box"><img data-picid="picid007" class="content-img" src="../static/img/th-69_6.jpg" alt="" height="133">
-                <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div class="content-img_box"><img data-picid="picid008" class="content-img" src="../static/img/th-69_8.jpg" alt="" height="133">
-                <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div class="content-img_box"><img data-picid="picid009" class="content-img" src="../static/img/th-69_7.jpg" alt="" height="133">
-                <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div class="content-img_box"><img data-picid="picid010" class="content-img" src="../static/img/th-69_9.jpg" alt="" height="133">
-                <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div class="content-img_box"><img data-picid="picid011" class="content-img" src="../static/img/th-62_171212ektar-1090.jpg" alt=""
-                    height="133">
-                <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div class="content-img_box"><img data-picid="picid012" class="content-img" src="../static/img/th-62_180114ektar-1140.jpg" alt=""
-                    height="133">
-                <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>
-            </div>
-            <div id="uploadBox">
-                <input id="uploadImg" class="file" type="file" name="img">
+            </div> -->
+            <div id="uploadBox" class="upload-box d-n">
+                <i id="btnUpload" class="glyphicon glyphicon-plus-sign"></i>
+                <!-- The file input field used as target for the file upload widget -->
+                <input id="fileupload" style="display: none;" type="file" name="img" multiple>
             </div>
         </div>
         <!-- 模态框（Modal） -->
-        <div id="somedialog" class="dialog">
+        <div id="somedialog" class="dialog my-dialog">
             <div class="dialog__overlay"></div>
             <div class="dialog__content">
                 <div class="login_logobox"><span class="glyphicon glyphicon-picture login_logo"></span></div>
@@ -224,8 +194,10 @@
 </body>
 <script src="../static/components/jquery.min.js"></script>
 <script src="../static/components/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-<script src="../static/components/bootstrap-fileinput/js/fileinput.min.js"></script>
-<script src="../static/components/bootstrap-fileinput/js/fileinput_locale_zh.js"></script>
+<!-- <script src="../static/components/bootstrap-fileinput/js/fileinput.min.js"></script>
+<script src="../static/components/bootstrap-fileinput/js/fileinput_locale_zh.js"></script> -->
+<script src="../static/components/file-upload/jquery.ui.widget.js"></script>
+<script src="../static/components/file-upload/jquery.fileupload.js"></script>
 <script src="../static/components/DialogEffects/js/modernizr.custom.js"></script>
 <script src="../static/components/DialogEffects/js/classie.js"></script>
 <script src="../static/components/DialogEffects/js/dialogFx.js"></script>

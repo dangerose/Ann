@@ -55,6 +55,7 @@ class LoginHandler(BaseHandler):
         else:
             self.render('login.html')
 
+
 class LogoutHandler(BaseHandler):
     def post(self):
         pass
@@ -67,6 +68,7 @@ class UploadHandler(BaseHandler):
         file_imgs = self.request.files['img']
         menu_path = '../static/img/{0}'.format(menuId)
         save_to = '../static/img/{0}/{1}'.format(menuId, picId)
+        min_img = '../static/img/{0}/mini_{1}'.format(menuId, picId)
         return_status = {
             "status": None,
             "msg": None
@@ -82,6 +84,20 @@ class UploadHandler(BaseHandler):
                     f.write(file_img["body"])
                     return_status["status"] = "ok"
                     return_status["msg"] = "success"
+                
+                img = Image.open(save_to)
+                img_size = img.size
+                min_size = min(img_size)
+                max_size = max(img_size)
+                print('origin {0} *{1}'.format(max_size, min_size))
+                rate = min_size/150.0
+                max_size = int(max_size / rate)
+                
+                new_size = (int(max_size),150)
+                print('new {0} * 150'.format(max_size))
+                mini_img = img.resize(new_size,Image.BILINEAR)
+                mini_img.save(min_img)
+                
 
         except Exception as e:
             return_status["status"] = "fail"
@@ -128,29 +144,42 @@ class GetPathHandler(BaseHandler):
         menuId = self.get_argument('menuId', None)
         menu_path = '../static/img/{0}/'.format(menuId)
 
-        files = os.listdir(menu_path)
         return_data = {
             "status": None,
             "msg": None,
             "data": []
         }
-        for f in files:
-            if not os.path.isdir(f):
-                print('deleting file %s', f)
-                file_path = menu_path.format(f)
-                img = Image.open(file_path)
-                img_size = img.size
-                min_size = min(img_size)
-                max_size = max(img_size)
-                if os.path.splitext(f)[1]=='.jpg' or os.path.splitext(f)[1]=='.png':
+
+        if not os.path.exists(menu_path):
+            return_data['status']='fail'
+            return_data['msg']='{0} not exists.'.format(menu_path)
+            self.finish(return_data)
+            return
+        try:
+            files = os.listdir(menu_path)
+            for f in files:
+                if not os.path.isdir(f):
+                    file_path = '{0}{1}'.format(menu_path, f)
+                    print('****opening file %s', file_path)
+                    img = Image.open(file_path)
+                    img_size = img.size
+                    min_size = min(img_size)
+                    max_size = max(img_size)
                     data = {}
-                    picId = os.path.splitext(f)[0]
+                    picId = str(f)
                     size = "{0}*{1}".format(str(max_size), str(min_size)) 
                     data['picId'] = picId
-                    data['size'] = size
+                    data['size'] = '{0}*{1}'.format(max_size,min_size)
+                    return_data['status'] = 'ok'
+                    return_data['msg'] = 'success'
                     return_data['data'].append(data)
-        
-        self.finish(return_data)
+
+        except Exception as e:
+            return_data['status']='fail'
+            return_data['msg']=str(e)
+            
+        finally:
+            self.finish(return_data)
 
 
 
