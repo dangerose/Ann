@@ -49,6 +49,7 @@ body {
 
 .content-img {
     cursor: pointer;
+    display: block;
 }
 
 .content-img_box {
@@ -56,12 +57,20 @@ body {
     position: relative;
     transition: all 100ms ease-in;
     overflow: hidden;
+    margin: 10px 10px 0 0;
 
     &:hover {
         & > .content-img_layer {
             top: 0;
         }
     }
+}
+
+.content-img_progress {
+    margin: 10px;
+    height: 15px;
+    top: calc(50% - 20px);
+    position: relative;
 }
 
 .content-img_layer {
@@ -124,6 +133,13 @@ body {
     }
 }
 
+.li-selected {
+    > a {
+        text-decoration: none!important;
+        color: #56a7fa!important;
+    }
+}
+
 .login_logobox {
     background-color: rgb(66, 66, 66);
     width: 50px;
@@ -145,6 +161,30 @@ body {
     margin: 20px 0 0;
     border: none;
     outline: none;
+}
+
+.my-dialog {
+    z-index: 99999;
+}
+
+.upload-box {
+    display: inline-block;
+    height: 133px;
+    width: 133px;
+    overflow: hidden;
+    border-radius: 4px;
+
+    > i {
+        font-size: 50px;
+        color: #bbb;
+        top: calc(50% - 25px);
+        left: calc(50% - 25px);
+        cursor: pointer;
+        transition: color 200ms ease-in-out;
+        &:hover { 
+            color: #66afe9;
+        }
+    }
 }
 
 .dialog__content {
