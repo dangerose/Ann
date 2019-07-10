@@ -16,8 +16,7 @@ class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
             (r"/", MainHandler),
-            (r"/login", LoginHandler),
-            (r"/logout", LogoutHandler),
+            (r"/admin", LoginHandler),
             (r"/upload_img", UploadHandler),
             (r"/delete_img", DeleteHandler),
             (r"/get_img_path", GetPathHandler),
@@ -43,22 +42,8 @@ class MainHandler(BaseHandler):
 
 class LoginHandler(BaseHandler):
     def get(self, *args, **kwargs):
-        self.render('login.html')
+        self.render('index.html')
 
-    def post(self, *args, **kwargs):
-        username = self.get_argument('username', None)
-        passwd = self.get_argument('passwd', None)
-
-        if username == options.username and passwd == options.passwd:
-            self.set_cookie(username, passwd)
-            self.redirect('/')
-        else:
-            self.render('login.html')
-
-
-class LogoutHandler(BaseHandler):
-    def post(self):
-        pass
 
 class UploadHandler(BaseHandler):
     def post(self, *args, **kwargs):
@@ -86,15 +71,15 @@ class UploadHandler(BaseHandler):
                     return_status["msg"] = "success"
                 
                 img = Image.open(save_to)
-                img_size = img.size
-                min_size = min(img_size)
-                max_size = max(img_size)
-                print('origin {0} *{1}'.format(max_size, min_size))
-                rate = min_size/150.0
-                max_size = int(max_size / rate)
-                
-                new_size = (int(max_size),150)
-                print('new {0} * 150'.format(max_size))
+
+                width = img.size[0]
+                height = img.size[1]
+                print('origin {0} *{1}'.format(width, height))
+
+                if height > 150:
+                    width = width * 150.0 / height
+                new_size = (int(width), 150)
+                print('new {0} * 150'.format(width))
                 mini_img = img.resize(new_size,Image.BILINEAR)
                 mini_img.save(min_img)
                 
@@ -113,18 +98,27 @@ class DeleteHandler(BaseHandler):
     def get(self, *args, **kwargs):
         menuId = self.get_argument('menuId', None)
         picId = self.get_argument('picId', None)
-
+        miniChar = 'mini_'
         file_path = '../static/img/{0}/{1}'.format(menuId, picId)
+        full_path = ''
+
+        if miniChar in picId:
+            full_path = file_path.replace(miniChar, '')
+
         return_status = {
             "status": None,
             "msg": None
         }
+
         try:
             if os.path.exists(file_path):
                 os.remove(file_path)
+                if os.path.exists(full_path):
+                    os.remove(full_path)
                 return_status["status"] = "ok"
                 return_status["msg"] = "success"
                 print("delete ok")
+
             else:
                 return_status["status"] = "fail"
                 return_status["msg"] = file_path + " not found"

@@ -38,6 +38,10 @@ a:hover {
     display: none!important;
 }
 
+.t-0 {
+    top: 0!important;
+}
+
 
 @for $i from 10 through 30 {
     .f-#{$i} {

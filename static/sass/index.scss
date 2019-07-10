@@ -1,4 +1,4 @@
-$menu-width: 270px;
+$menu-width: 250px;
 
 body {
     
@@ -15,14 +15,14 @@ body {
     position: fixed;
     height: 100%;
     background-color: #fff;
-    padding: 20px 0 0 10px;
+    padding: 20px 0 0 25px;
 }
 
 .content {
     height: 100%;
     margin: 0 0 0 $menu-width;
     top: 0;
-    padding: 20px 50px 25px 40px;
+    padding: 31px 50px 25px 40px;
 }
 
 .content-title {
@@ -49,6 +49,7 @@ body {
 
 .content-img {
     cursor: pointer;
+    display: block;
 }
 
 .content-img_box {
@@ -56,13 +57,20 @@ body {
     position: relative;
     transition: all 100ms ease-in;
     overflow: hidden;
-    margin: 0 10px 0 0;
+    margin: 10px 10px 0 0;
 
     &:hover {
         & > .content-img_layer {
             top: 0;
         }
     }
+}
+
+.content-img_progress {
+    margin: 10px;
+    height: 15px;
+    top: calc(50% - 20px);
+    position: relative;
 }
 
 .content-img_layer {
@@ -107,13 +115,33 @@ body {
 	max-height: 100%;
 }
 
+.menu-title_name {
+    font-size: 2rem;
+    color: #666!important;
+}
+
+.menu-title_class {
+    font-size: 1.2rem; 
+    color: #666!important;
+}
+
 .menu-cont {
     padding: 30px 50px 25px 5px;
     ul {
-        padding: 0 0 1rem 0;
+        padding: 0 0 5px 0;
         margin: 0;
         /* 一级节点 */
         li.menu-cont_title {
+            > a:hover {
+                color: #56a7fa;
+                > p {
+                    color: #56a7fa;
+                }
+            }
+            p:nth-of-type(2) {
+                margin-top: -4px;
+                color: #bbb;
+            }
         }
         /* 二级节点 */
         li:not(.menu-cont_title) {
@@ -126,7 +154,7 @@ body {
 }
 
 .li-selected {
-    > a {
+    p {
         text-decoration: none!important;
         color: #56a7fa!important;
     }
@@ -165,17 +193,24 @@ body {
     width: 133px;
     overflow: hidden;
     border-radius: 4px;
+    box-shadow: 0 0 4px grey;
+    transition: box-shadow 200ms ease-in-out;
+    margin: 10px 10px 0 0;
+    cursor: pointer;
+    &:hover {
+        box-shadow: 0 0 10px #66afe9;
+
+        & > i {
+            color: #66afe9;
+        }
+    }
 
     > i {
         font-size: 50px;
         color: #bbb;
         top: calc(50% - 25px);
         left: calc(50% - 25px);
-        cursor: pointer;
         transition: color 200ms ease-in-out;
-        &:hover { 
-            color: #66afe9;
-        }
     }
 }
 

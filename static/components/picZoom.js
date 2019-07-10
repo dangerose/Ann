@@ -5,10 +5,12 @@
     }
 
     picZoom.prototype.show = function(url) {
+        $('body').css('overflow', 'hidden');
         this._clear();
         this._add(url);
     }
     picZoom.prototype.hide = function() {
+        $('body').css('overflow', 'auto');
         this._clear();
     }
 
@@ -25,7 +27,7 @@
             <div class="zoom">\
                 <div class="zoom-overlay"></div>\
                 <div class="zoom-content d-n" id="zoomContent">\
-                    <img class="zoom-pic" src="../static/img/001.jpg"/>\
+                    <img class="zoom-pic" src="'+ url +'"/>\
                 </div>\
                 <div class="zoom-load" id="zoomLoad">\
                     <img class="zoom-loadicon" src="../static/img/loading.gif"/>\
