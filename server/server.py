@@ -37,6 +37,8 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
+        self.write('set_header')
+        self.set_header('Cache-Control', 'max-age=1')
         self.render('index.html')
 
 
