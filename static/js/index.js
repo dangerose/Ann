@@ -1,7 +1,9 @@
 (function () {
+    var _isAdmin = window.location.href.substr(-5).toLowerCase() === 'admin';
+
     var Storage = {
         get: function (name) {
-            var data = sessionStorage.getItem(name);
+            var data = localStorage.getItem(name);
             var curTime = new Date().getTime();
             if (!data) {
                 return data;
@@ -21,10 +23,10 @@
         set: function (name, val, expries) {
             var curTime = new Date().getTime();
             var expriesTime = curTime + expries * 1000;
-            sessionStorage.setItem(name, JSON.stringify({ value: val, expries: expriesTime }));
+            localStorage.setItem(name, JSON.stringify({ value: val, expries: expriesTime }));
         },
         delete: function (name) {
-            sessionStorage.removeItem(name);
+            localStorage.removeItem(name);
         }
     };
 
@@ -45,7 +47,6 @@
 
             // 获取资源
             $.get("/get_img_path?menuId=" + menuId, function (data) {
-                console.log(data);
                 if (data.status === 'ok') {
                     // 加载图片
                     data.data.forEach(function (ele) {
@@ -77,15 +78,10 @@
             var $menu = $('#menu');
             var $curSel = $menu.find('.li-selected');
             var $contentBox = $iconRemove.parents('.content-img_box');
-            console.log(picId);
+            
             $.get("/delete_img?picId=" + picId + "&menuId=" + $curSel.attr('data-menuId'), function (data, status) {
                 $contentBox.remove();
             });
-        });
-
-        // hash 事件
-        $(window).bind('hashchange', function () {
-            view.toViewOrEdit();
         });
 
         // 打开登录窗口 事件
@@ -135,14 +131,12 @@
     // 改变视图
     var view = {
         // 查看视图 还是 修改视图
-        toViewOrEdit: function (isEdit) {
+        toViewOrEdit: function () {
             var $uploadBox = $('#uploadBox');
             var $contentTitle = $('#contentTitle');
             var $imgDelLayer = $('.content-img_layer');
-            var hash = window.location.hash.replace('#', '');
-            var isEdit = hash === 'edit'; // 查看 还是 修改页面
             // 是否修改视图
-            if (isEdit) {
+            if (_isAdmin) {
                 // 显示登录工具栏
                 $contentTitle.removeClass('d-n');
                 // 判断是否登录
@@ -170,9 +164,7 @@
         },
         // 登录按钮
         changeBtnShow: function () {
-            var hash = window.location.hash.replace('#', '');
-            var isEdit = hash === 'edit'; // 查看 还是 修改页面
-            if (!isEdit) {
+            if (!_isAdmin) {
                 return;
             }
             var $btnShow = $('#btnShow');
@@ -183,9 +175,7 @@
             }
         },
         changeBtnLogin: function (type) {
-            var hash = window.location.hash.replace('#', '');
-            var isEdit = hash === 'edit'; // 查看 还是 修改页面
-            if (!isEdit) {
+            if (!_isAdmin) {
                 return;
             }
             var $btnLogin = $('#btnLogin');
@@ -219,33 +209,36 @@
     }) */
 
     function initFileInput() {
-        var $btnUpload = $('#btnUpload');
+        var $uploadBox = $('#uploadBox');
         var $fileupload = $('#fileupload');
 
         // 事件
-        $btnUpload.off('click').click(function () {
+        $uploadBox.off('click').click(function () {
             $fileupload.val("");
-            /*  $fileupload.off('fileuploadsubmit').bind('fileuploadsubmit', function (e, data) {
-                    debugger
-            }); */
-            var $html, newPicId, curMenuId;
+            $fileupload.parent().click(function(e) {
+                e.stopPropagation();
+            });
+            
             $fileupload.trigger('click').fileupload({
                 url: '/upload_img',
                 dataType: 'json',
+                /* sequentialUploads: true, // 是否按顺序一个个上传 */
+                limitConcurrentUploads: 3, 
                 add: function (e, data) {
                     var allowTypes = ['jpg'];
                     var _type = $(data.files[0].name.split('.')).last()[0].toLowerCase(); // 文件后缀
                     var $menu = $('#menu');
+                    var $html, newPicId, curMenuId;
+                    
                     curMenuId = $menu.find('.li-selected').attr('data-menuId');
                     newPicId = curMenuId + '_' + findMaxNum() + '.' + _type;
-
                     if ($.inArray(_type, allowTypes) != -1) {
                         data.formData = { menuId: curMenuId, picId: newPicId };
                         data.submit();
 
-                        // 增加到页面
+                        // 增加到页面   文件名是唯一的可以作为id
                         var html = '<div class="content-img_box">\
-                                        <img data-picId="'+ newPicId +'" class="content-img" src="" alt="" height="133" width="133">\
+                                        <img data-picId="mini_'+ newPicId +'" class="content-img" src="" alt="" height="133" width="133">\
                                         <div class="content-img_layer t-0">\
                                             <div class="progress content-img_progress">\
                                                 <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 5%">\
@@ -264,12 +257,18 @@
                     }
                 },
                 done: function (e, data) {
+                    var $img = $('[data-picId="mini_'+ data.formData.picId +'"]');
+                    var $html = $img.parent();
+                    var curMenuId = data.formData.menuId;
+                    var newPicId = data.formData.picId;
+                    $html.find('img').attr('src', '../static/img/'+ curMenuId + '/mini_' + newPicId);
+                    $html.removeAttr('id').removeAttr('data-curMenuId').removeAttr('data-newPicId');
                     console.log('done');
-                    $html.find('img').attr('src', '../static/img/'+ curMenuId + '/' + newPicId).attr('data-picId', newPicId);
                 },
-                progressall: function (e, data) {
+                progress: function (e, data) {
+                    var $img = $('[data-picId="mini_'+ data.formData.picId +'"]');
+                    var $html = $img.parent();
                     var progress = parseInt(data.loaded / data.total * 100, 10);
-                    console.log(progress);
                     $html.find('.progress-bar').css(
                         'width',
                         progress + '%'
@@ -283,7 +282,7 @@
 
     function findMaxNum() {
         var $imgs = $('#contentImgs').find('.content-img');
-        var maxNum = 1;
+        var maxNum = 0;
 
         // 找出最大的id
         $imgs.each(function (index, item) {

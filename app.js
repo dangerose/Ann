@@ -11,7 +11,7 @@ var ejs = require('ejs');
 var port = 4000; // 端口
 var app = express();
 var proxy = require('http-proxy-middleware');
-var isProxy = true; // 是否连接代理服务器
+var isProxy = false; // 是否连接代理服务器
 var mockPath = path.join(__dirname, 'mock');
 var proxyUrl = 'http://134.175.55.52:8080'; // 代理服务器地址(测试环境)
 // var proxyUrl = 'http://172.20.60.30:8080'; // 代理服务器地址（小明本地环境）
@@ -45,11 +45,12 @@ app.use(cookieParser());
 app.use(stPath + '/static', express.static(path.join(__dirname, isDev ? 'static' : 'dist/static')));
 app.use(stPath + '/views', express.static(path.join(__dirname, isDev ? 'views' : 'dist/view')));
 // app.use(stPath, express.static(path.join(__dirname, 'mock')));
-app.use(stPath + '/index', function (req, res, next) {
+app.use(stPath + '/', function (req, res, next) {
     res.render('index');
 });
-app.use(stPath + '/', function (req, res, next) {
-    res.render('login');
+app.use(stPath + '/admin', function (req, res, next) {
+    res.setHeader('cache-control', 'public, max-age=0');
+    res.render('index');
 });
 
 // 处理http请求，如果mock文件夹下存在相应文件则访问文件，如果不存在则自动响应数据

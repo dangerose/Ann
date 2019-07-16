@@ -5,10 +5,12 @@
     }
 
     picZoom.prototype.show = function(url) {
+        $('body').css('overflow', 'hidden');
         this._clear();
         this._add(url);
     }
     picZoom.prototype.hide = function() {
+        $('body').css('overflow', 'auto');
         this._clear();
     }
 
