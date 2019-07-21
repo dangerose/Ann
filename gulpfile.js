@@ -19,6 +19,24 @@ var run = require('run-sequence'); //按顺序运行插件
 var del = require('del'); //删除工具
 var path = require('path');
 var nodemon    = require('gulp-nodemon');
+
+
+// 启动node服务
+gulp.task('server', function() {
+    return nodemon({
+        script : path.join(__dirname, 'bin/www'),
+        ignore : [
+            "/.idea",
+            "/node_modules",
+            "/dist",
+            "/.git"
+        ],
+        env    : {
+            "NODE_ENV": "development"
+        }
+    });
+});
+
 //
 // ─── SASS ───────────────────────────────────────────────────────────────────────
 //
