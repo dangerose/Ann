@@ -52,7 +52,7 @@
                     data.data.forEach(function (ele) {
                         if (ele.picId.substr(0, 4) === 'mini') {
                             var html = '<div class="content-img_box">\
-                                            <img data-picId="'+ ele.picId + '" class="content-img" src="../static/img/' + menuId + '/' + ele.picId + '" alt="" height="133">\
+                                            <img data-picId="'+ ele.picId + '" class="content-img" src="../static/img/' + menuId + '/' + ele.picId + '" alt="">\
                                             <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>\
                                         </div>';
                             $uploadBox.before(html);
@@ -138,6 +138,11 @@
 
     // 改变视图
     var view = {
+        // 定义根元素html的font-size
+        defineRem: function() {
+            //var screenH = window.screen.height; // 分辨率
+            //$('html').css('font-size', screenH / 100);
+        },
         // 查看视图 还是 修改视图
         toViewOrEdit: function () {
             var $uploadBox = $('#uploadBox');
@@ -312,6 +317,7 @@
     }
 
     function init() {
+        view.defineRem();
         bindEvents();
         view.toViewOrEdit();
         view.changeBtnShow();

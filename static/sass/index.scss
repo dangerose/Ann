@@ -1,12 +1,9 @@
-$menu-width: 250px;
-
 body {
     
 }
 
 .menu {
-    width: $menu-width;
-    padding-left: 10px;
+    width: 250px;
     overflow: auto;
     text-align: left;
     top: 0;
@@ -20,9 +17,22 @@ body {
 
 .content {
     height: 100%;
-    margin: 0 0 0 $menu-width;
+    margin: 0 0 0 250px;
     top: 0;
     padding: 31px 50px 25px 40px;
+}
+
+/* 手机 */
+@media screen and (max-device-width: 768px){
+    .menu {
+        width: 145px;
+        padding: 20px 0 0 10px;
+    }
+
+    .content {
+        margin: 0 0 0 145px;
+        padding: 30px 10px 30px 10px;
+    }
 }
 
 .content-title {
@@ -50,6 +60,13 @@ body {
 .content-img {
     cursor: pointer;
     display: block;
+    height: 133px;
+}
+
+@media screen and (max-device-width: 768px){
+    .content-img {
+        height: 60px;
+    }
 }
 
 .content-img_box {
@@ -125,6 +142,12 @@ body {
     color: #666!important;
 }
 
+@media screen and (max-device-width: 768px){
+    .menu-title_class {
+        font-size: 10px;
+    }
+}
+
 .menu-cont {
     padding: 30px 50px 25px 5px;
     ul {
@@ -138,17 +161,82 @@ body {
                     color: #56a7fa;
                 }
             }
+            p:nth-of-type(1) {
+                font-size: 14px;
+            }
             p:nth-of-type(2) {
                 margin-top: -4px;
                 color: #bbb;
+                font-size: 12px;
+                word-break: break-all;
             }
-        }
-        /* 二级节点 */
-        li:not(.menu-cont_title) {
-            padding-left: 10px;
         }
         p {
             margin: 0;
+        }
+    }
+}
+
+ /* 笔记本 */
+@media screen and (max-device-width: 1366px){
+    .menu-cont {
+        padding: 10px 30px 15px 5px;
+        ul {
+            padding: 0 0 1px 0;
+            margin: 0;
+            /* 一级节点 */
+            li.menu-cont_title {
+                > a:hover {
+                    color: #56a7fa;
+                    > p {
+                        color: #56a7fa;
+                    }
+                }
+                p:nth-of-type(1) {
+                    font-size: 12px;
+                }
+                p:nth-of-type(2) {
+                    margin-top: -4px;
+                    color: #bbb;
+                    font-size: 12px;
+                    word-break: break-all;
+                }
+            }
+            p {
+                margin: 0;
+            }
+        }
+    }
+}
+
+ /* 手机 */
+@media screen and (max-device-width: 768px){
+    .menu-cont {
+        padding: 20px 30px 15px 5px;
+        ul {
+            padding: 0 0 1px 0;
+            margin: 0;
+            /* 一级节点 */
+            li.menu-cont_title {
+                > a:hover {
+                    color: #56a7fa;
+                    > p {
+                        color: #56a7fa;
+                    }
+                }
+                p:nth-of-type(1) {
+                    font-size: 14px!important;
+                }
+                p:nth-of-type(2) {
+                    margin-top: -4px;
+                    color: #bbb;
+                    font-size: 8px;
+                    word-break: break-all;
+                }
+            }
+            p {
+                margin: 0;
+            }
         }
     }
 }
