@@ -128,6 +128,14 @@
         });
     }
 
+    function filetoDataURL(file, fn) {
+        var reader = new FileReader();
+        reader.onloadend = function (e) {
+            fn(e.target.result);
+        };
+        reader.readAsDataURL(file);
+    };
+
     // 改变视图
     var view = {
         // 查看视图 还是 修改视图
@@ -261,7 +269,9 @@
                     var $html = $img.parent();
                     var curMenuId = data.formData.menuId;
                     var newPicId = data.formData.picId;
-                    $html.find('img').attr('src', '../static/img/' + curMenuId + '/mini_' + newPicId);
+                    filetoDataURL(data.files[0], function(dataUrl) {
+                        $html.find('img').attr('src', dataUrl);
+                    });
                     $html.removeAttr('id').removeAttr('data-curMenuId').removeAttr('data-newPicId');
                     console.log('done');
                 },
