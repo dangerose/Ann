@@ -20,10 +20,10 @@ class Application(tornado.web.Application):
             (r"/upload_img", UploadHandler),
             (r"/delete_img", DeleteHandler),
             (r"/get_img_path", GetPathHandler),
+            (r"/static/(.*)", StaticHandler, {'path': os.path.join(os.path.dirname(__file__), "../static")})
         ]
         settings = dict(
             template_path=os.path.join(os.path.dirname(__file__), "../views"),
-            static_path=os.path.join(os.path.dirname(__file__), "../static"),
             debug=True,
         )
         tornado.web.Application.__init__(self, handlers, **settings)
@@ -37,13 +37,13 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class MainHandler(BaseHandler):
     def get(self):
-        self.write('set_header')
         self.set_header('Cache-Control', 'max-age=1')
         self.render('index.html')
 
 
 class LoginHandler(BaseHandler):
     def get(self, *args, **kwargs):
+        self.set_header('Cache-Control', 'max-age=1')
         self.render('index.html')
 
 
@@ -176,6 +176,10 @@ class GetPathHandler(BaseHandler):
             
         finally:
             self.finish(return_data)
+
+class StaticHandler(tornado.web.StaticFileHandler):
+    def set_extra_headers(self, path):
+        self.set_header('Cache-Control', 'max-age=1')
 
 
 

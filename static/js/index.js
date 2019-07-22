@@ -78,7 +78,7 @@
             var $menu = $('#menu');
             var $curSel = $menu.find('.li-selected');
             var $contentBox = $iconRemove.parents('.content-img_box');
-            
+
             $.get("/delete_img?picId=" + picId + "&menuId=" + $curSel.attr('data-menuId'), function (data, status) {
                 $contentBox.remove();
             });
@@ -127,6 +127,14 @@
             window.location.reload();
         });
     }
+
+    function filetoDataURL(file, fn) {
+        var reader = new FileReader();
+        reader.onloadend = function (e) {
+            fn(e.target.result);
+        };
+        reader.readAsDataURL(file);
+    };
 
     // 改变视图
     var view = {
@@ -215,21 +223,21 @@
         // 事件
         $uploadBox.off('click').click(function () {
             $fileupload.val("");
-            $fileupload.parent().click(function(e) {
+            $fileupload.parent().click(function (e) {
                 e.stopPropagation();
             });
-            
+
             $fileupload.trigger('click').fileupload({
                 url: '/upload_img',
                 dataType: 'json',
                 /* sequentialUploads: true, // 是否按顺序一个个上传 */
-                limitConcurrentUploads: 3, 
+                limitConcurrentUploads: 3,
                 add: function (e, data) {
                     var allowTypes = ['jpg'];
                     var _type = $(data.files[0].name.split('.')).last()[0].toLowerCase(); // 文件后缀
                     var $menu = $('#menu');
                     var $html, newPicId, curMenuId;
-                    
+
                     curMenuId = $menu.find('.li-selected').attr('data-menuId');
                     newPicId = curMenuId + '_' + findMaxNum() + '.' + _type;
                     if ($.inArray(_type, allowTypes) != -1) {
@@ -238,7 +246,7 @@
 
                         // 增加到页面   文件名是唯一的可以作为id
                         var html = '<div class="content-img_box">\
-                                        <img data-picId="mini_'+ newPicId +'" class="content-img" src="" alt="" height="133" width="133">\
+                                        <img data-picId="mini_'+ newPicId + '" class="content-img" src="" alt="" height="133" width="133">\
                                         <div class="content-img_layer t-0">\
                                             <div class="progress content-img_progress">\
                                                 <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 5%">\
@@ -257,16 +265,18 @@
                     }
                 },
                 done: function (e, data) {
-                    var $img = $('[data-picId="mini_'+ data.formData.picId +'"]');
+                    var $img = $('[data-picId="mini_' + data.formData.picId + '"]');
                     var $html = $img.parent();
                     var curMenuId = data.formData.menuId;
                     var newPicId = data.formData.picId;
-                    $html.find('img').attr('src', '../static/img/'+ curMenuId + '/mini_' + newPicId);
+                    filetoDataURL(data.files[0], function(dataUrl) {
+                        $html.find('img').attr('src', dataUrl);
+                    });
                     $html.removeAttr('id').removeAttr('data-curMenuId').removeAttr('data-newPicId');
                     console.log('done');
                 },
                 progress: function (e, data) {
-                    var $img = $('[data-picId="mini_'+ data.formData.picId +'"]');
+                    var $img = $('[data-picId="mini_' + data.formData.picId + '"]');
                     var $html = $img.parent();
                     var progress = parseInt(data.loaded / data.total * 100, 10);
                     $html.find('.progress-bar').css(
