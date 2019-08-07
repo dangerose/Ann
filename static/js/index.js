@@ -320,32 +320,10 @@
 
         // 图片滚动
         $('.center').slick({
-            centerMode: true,
-            centerPadding: '60px',
-            slidesToShow: 5,
+            slidesToShow: 1,
             arrows: false,
             autoplay: true,
-            autoplaySpeed: 2500,
-            responsive: [
-                {
-                    breakpoint: 1380,
-                    settings: {
-                        arrows: false,
-                        centerMode: true,
-                        centerPadding: '40px',
-                        slidesToShow: 3
-                    }
-                },
-                {
-                    breakpoint: 768,
-                    settings: {
-                        arrows: false,
-                        centerMode: true,
-                        centerPadding: '40px',
-                        slidesToShow: 1
-                    }
-                }
-            ]
+            autoplaySpeed: 2500
         });
     }
 
