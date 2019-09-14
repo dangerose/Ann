@@ -82,7 +82,7 @@ class UploadHandler(BaseHandler):
                     width = width * 150.0 / height
                 new_size = (int(width), 150)
                 print('new {0} * 150'.format(width))
-                mini_img = img.resize(new_size,Image.BILINEAR)
+                mini_img = img.resize(new_size,Image.ANTIALIAS)
                 mini_img.save(min_img)
                 
 
