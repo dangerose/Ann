@@ -1,6 +1,15 @@
 (function () {
     var _isAdmin = window.location.href.substr(-5).toLowerCase() === 'admin';
 
+    // 判断是否是移动设备
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+    if ((isAndroid || isiOS) && window.location.href.indexOf('admin') !== -1) {
+        window.location.href = '/';
+        return;
+    }
+
     var Storage = {
         get: function (name) {
             var data = localStorage.getItem(name);
