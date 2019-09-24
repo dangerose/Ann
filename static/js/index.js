@@ -11,6 +11,39 @@
   }
   var _dataSorted_mini = [];
 
+  // 设置根元素
+  function initSize() {
+    //获取当前浏览器窗口宽度(这里的实质就是body宽度)
+    var win_w = document.body.offsetWidth;
+    var fontSize = 0;
+    //定义变量 var fontSize;
+    if (win_w > 960) {
+      fontSize = 36;
+    } else {
+      //如果浏览器窗口宽度(这里的实质就是body宽度)值小于320，取320
+
+      win_w = Math.max(320, win_w);
+      fontSize = (win_w / 320) * 12;
+    }
+    document.getElementsByTagName('html')[0].style.fontSize = fontSize + 'px';
+  }
+
+  initSize();
+
+  window.addEventListener('resize', initSize, false);
+
+  // 当弹窗后禁止手机滚动
+  /* document.addEventListener(
+    'touchmove',
+    function(e) {
+      if ($('.zoom').length > 0) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    {passive:false}
+  ); */
+
   var Storage = {
     get: function(name) {
       var data = localStorage.getItem(name);
@@ -128,7 +161,12 @@
           var $zoomPic = $('.zoom-pic');
           if ($zoomPic.attr('src').indexOf('carousel') === -1) {
             for (var i = 0; i < _dataSorted_mini.length; i++) {
-              if ($zoomPic.attr('src').indexOf(_dataSorted_mini[i].picId.replace('mini_', '')) !== -1) {
+              if (
+                $zoomPic
+                  .attr('src')
+                  .indexOf(_dataSorted_mini[i].picId.replace('mini_', '')) !==
+                -1
+              ) {
                 if (i === 0) {
                   var zoomSrc = $zoomPic.attr('src').split('/');
                   zoomSrc.splice(
@@ -153,14 +191,15 @@
           var $zoomPic = $('.zoom-pic');
           if ($zoomPic.attr('src').indexOf('carousel') === -1) {
             for (var i = 0; i < _dataSorted_mini.length; i++) {
-              if ($zoomPic.attr('src').indexOf(_dataSorted_mini[i].picId.replace('mini_', '')) !== -1) {
+              if (
+                $zoomPic
+                  .attr('src')
+                  .indexOf(_dataSorted_mini[i].picId.replace('mini_', '')) !==
+                -1
+              ) {
                 if (i === _dataSorted_mini.length - 1) {
                   var zoomSrc = $zoomPic.attr('src').split('/');
-                  zoomSrc.splice(
-                    -1,
-                    1,
-                    _dataSorted_mini[0].picId
-                  );
+                  zoomSrc.splice(-1, 1, _dataSorted_mini[0].picId);
                   $zoomPic.attr('src', zoomSrc.join('/').replace('mini_', ''));
                 } else {
                   var zoomSrc = $zoomPic.attr('src').split('/');

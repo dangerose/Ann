@@ -5,96 +5,101 @@
 } */
 
 html {
-    font-size: 10px;
 }
 
 body {
-    font-size: 1.2rem;
+  font-size: 12px;
 }
 
-img { 
-    border: 0 none; 
-    vertical-align: top; 
+img {
+  border: 0 none;
+  vertical-align: top;
 }
 
-ul, li { 
-    list-style-type: none; 
+ul,
+li {
+  list-style-type: none;
 }
 
 a:visited {
-    text-decoration: none;
-    color: #666;
+  text-decoration: none;
+  color: #666;
 }
 a:link {
-    text-decoration: none;
-    color: #666;
+  text-decoration: none;
+  color: #666;
 }
 a:hover {
-    text-decoration: none;
-    color: #56a7fa;
+  text-decoration: none;
+  color: #56a7fa;
 }
 
 .d-n {
-    display: none!important;
+  display: none !important;
 }
 
 .t-0 {
-    top: 0!important;
+  top: 0 !important;
 }
-
 
 @for $i from 10 through 30 {
-    .f-#{$i} {
-        font-size: $i * 0.1rem;
-    }
+  .f-#{$i} {
+    font-size: $i * 0.1rem;
+  }
 }
-
-
 
 /* ------- 图片放大插件 ----- */
 .zoom {
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 999999;
-    background: transparent;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 999999;
+  background: transparent;
 }
 
-.zoom-content, .zoom-load {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
+.zoom-content,
+.zoom-load {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
 }
 
 .zoom-overlay {
-    position: fixed;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    opacity: 0.9;
-    background: #fff;
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  opacity: 0.9;
+  background: #fff;
 }
 
 .zoom-pic {
-    max-width: 80%;
-    max-height: 80%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-53%);
-    display: block;
-    cursor: pointer;
+  max-width: 80%;
+  max-height: 80%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-53%);
+  display: block;
+  cursor: pointer;
+}
+
+@media all and (orientation: portrait) {
+  // 竖屏
+  .zoom-pic {
+    transform: translateX(-50%) translateY(-63%);
+  }
 }
 
 .zoom-loadicon {
-    margin: 0 auto;
-    display: block;
-    position: absolute;
-    top: calc(45% - 8px);
-    left: calc(50% - 8px);
+  margin: 0 auto;
+  display: block;
+  position: absolute;
+  top: calc(45% - 8px);
+  left: calc(50% - 8px);
 }
