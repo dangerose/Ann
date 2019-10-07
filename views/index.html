@@ -1,54 +1,74 @@
 <!DOCTYPE html>
 <html lang="zh">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimun-scale=1.0,maximum-scale=2.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1.0,minimun-scale=1.0,maximum-scale=2.0"
+    />
     <title>南视觉影像工作室</title>
     <link rel="icon" href="../static/img/favicon.ico" type="image/x-icon" />
 
-    <link rel="stylesheet" href="../static/components/bootstrap-3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../static/components/DialogEffects/css/dialog.css">
-    <link rel="stylesheet" href="../static/components/DialogEffects/css/dialog-cathy.css">
-    <link rel="stylesheet" href="../static/components/file-upload/jquery.fileupload.css">
+    <link
+      rel="stylesheet"
+      href="../static/components/bootstrap-3.3.7/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../static/components/DialogEffects/css/dialog.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../static/components/DialogEffects/css/dialog-cathy.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../static/components/file-upload/jquery.fileupload.css"
+    />
     <!-- <link rel="stylesheet" href="../static/components/bootstrap-fileinput/css/fileinput.min.css"> -->
-    <link rel="stylesheet" href="../static/components/slick-master/slick/slick.css">
-    <link rel="stylesheet" href="../static/components/slick-master/slick/slick-theme.css">
+    <link
+      rel="stylesheet"
+      href="../static/components/slick-master/slick/slick.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../static/components/slick-master/slick/slick-theme.css"
+    />
 
-    <link rel="stylesheet" href="../static/css/common.min.css">
-    <link rel="stylesheet" href="../static/css/index.min.css">
-</head>
+    <link rel="stylesheet" href="../static/css/common.min.css" />
+    <link rel="stylesheet" href="../static/css/index.min.css" />
+  </head>
 
-<body>
+  <body>
     <div class="menu">
-        <div class="menu-title">
+      <div class="menu-title">
+        <a href="javascript:;">
+          <!-- <img class="menu-title_logo" src="../static/img/logo.png" alt="主页LOGO"> -->
+          <strong class="menu-title_name">南视觉</strong>
+          <i class="menu-title_class"> NANSHIJUE</i>
+        </a>
+      </div>
+      <div id="menu" class="menu-cont">
+        <a href="javascript:;"> </a>
+        <ul>
+          <li class="menu-cont_title" data-menuId="menu01">
             <a href="javascript:;">
-                <!-- <img class="menu-title_logo" src="../static/img/logo.png" alt="主页LOGO"> -->
-                <strong class="menu-title_name">南视觉</strong> <i class="menu-title_class"> NANSHIJUE</i>
+              <p>建筑</p>
+              <p>Architecture</p>
             </a>
-        </div>
-        <div id="menu" class="menu-cont">
+          </li>
+        </ul>
+
+        <ul>
+          <li class="menu-cont_title" data-menuId="menu02">
             <a href="javascript:;">
+              <p>景观</p>
+              <p>Landscape</p>
             </a>
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu01">
-                    <a href="javascript:;">
-                        <p>建筑</p>
-                        <p>Architecture</p>
-                    </a>
-                </li>
-            </ul>
+          </li>
+        </ul>
 
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu02">
-                    <a href="javascript:;">
-                        <p>景观</p>
-                        <p>Landscape</p>
-                    </a>
-                </li>
-            </ul>
-
-            <!-- <ul>
+        <!-- <ul>
                 <li class="menu-cont_title" data-menuId="menu03">
                     <a href="javascript:;">
                         <p>样板房</p>
@@ -57,70 +77,70 @@
                 </li>
             </ul> -->
 
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu04">
-                    <a href="javascript:;">
-                        <p>酒店</p>
-                        <p>Hotel</p>
-                    </a>
-                </li>
-            </ul>
+        <ul>
+          <li class="menu-cont_title" data-menuId="menu04">
+            <a href="javascript:;">
+              <p>酒店</p>
+              <p>Hotel</p>
+            </a>
+          </li>
+        </ul>
 
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu05">
-                    <a href="javascript:;">
-                        <p>民宿&精品</p>
-                        <p>Home stay&Boutique</p>
-                    </a>
-                </li>
-            </ul>
+        <ul>
+          <li class="menu-cont_title" data-menuId="menu05">
+            <a href="javascript:;">
+              <p>民宿&精品</p>
+              <p>Home stay&Boutique</p>
+            </a>
+          </li>
+        </ul>
 
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu06">
-                    <a href="javascript:;">
-                        <p>地产</p>
-                        <p>Estate</p>
-                    </a>
-                </li>
-            </ul>
+        <ul>
+          <li class="menu-cont_title" data-menuId="menu06">
+            <a href="javascript:;">
+              <p>地产</p>
+              <p>Estate</p>
+            </a>
+          </li>
+        </ul>
 
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu99">
-                    <a href="javascript:;">
-                        <p>样板房</p>
-                        <p>Sample houses</p>
-                    </a>
-                </li>
-            </ul>
+        <ul>
+          <li class="menu-cont_title" data-menuId="menu99">
+            <a href="javascript:;">
+              <p>样板房</p>
+              <p>Sample houses</p>
+            </a>
+          </li>
+        </ul>
 
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu07">
-                    <a href="javascript:;">
-                        <p>餐厅</p>
-                        <p>Restaurant</p>
-                    </a>
-                </li>
-            </ul>
+        <ul>
+          <li class="menu-cont_title" data-menuId="menu07">
+            <a href="javascript:;">
+              <p>餐厅</p>
+              <p>Restaurant</p>
+            </a>
+          </li>
+        </ul>
 
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu08">
-                    <a href="javascript:;">
-                        <p>商业/办公</p>
-                        <p>Business/Office</p>
-                    </a>
-                </li>
-            </ul>
+        <ul>
+          <li class="menu-cont_title" data-menuId="menu08">
+            <a href="javascript:;">
+              <p>商业/办公</p>
+              <p>Business/Office</p>
+            </a>
+          </li>
+        </ul>
 
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu09">
-                    <a href="javascript:;">
-                        <p>娱乐</p>
-                        <p>Entertainment</p>
-                    </a>
-                </li>
-            </ul>
+        <ul>
+          <li class="menu-cont_title" data-menuId="menu09">
+            <a href="javascript:;">
+              <p>娱乐</p>
+              <p>Entertainment</p>
+            </a>
+          </li>
+        </ul>
 
-            <!-- 
+        <!-- 
             <ul>
                 <li class="menu-cont_title" data-menuId="menu10">
                     <a href="javascript:;">
@@ -130,113 +150,132 @@
                 </li>
             </ul> -->
 
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu11">
-                    <a href="javascript:;">
-                        <p>市政形象&航拍</p>
-                        <p>Municipal/Aerial</p>
-                    </a>
-                </li>
-            </ul>
+        <ul>
+          <li class="menu-cont_title" data-menuId="menu11">
+            <a href="javascript:;">
+              <p>市政形象&航拍</p>
+              <p>Municipal/Aerial</p>
+            </a>
+          </li>
+        </ul>
 
-            <img class="weixinCode" src="../static/img/carousel/weixinCode.jpg" alt="">
-
-            <!-- <ul>
-                <li class="menu-cont_title" data-menuId="menu12">
-                    <a href="javascript:;">
-                        <p>工作室简介</p>
-                        <p>About us</p>
-                    </a>
-                </li>
-            </ul>
-
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu13">
-                    <a href="javascript:;">
-                        <p>联系方式</p>
-                        <p>Contact</p>
-                    </a>
-                </li>
-            </ul> -->
+        <div class="menu__bottom">
+          <p style="font-weight: bold;font-size: 14px;margin: 0 0 5px 0;">合作推荐</p>
+          <p><a href="http://www.jf-photo.cn" style="font-size: 14px;margin: 0 0 5px 0;" target="_blank">贾方建筑摄影工作室</a></p>
         </div>
+
+        <img
+          class="weixinCode"
+          src="../static/img/carousel/weixinCode.jpg"
+          alt=""
+        />
+      </div>
     </div>
     <div class="content">
-        <div id="contentTitle" class="content-title d-n">
-            <button id="btnShow" class="content-title_login blue" href="javascript:;" data-dialog="somedialog"
-                class="trigger">登
-                录</button>
-            <div id="btnShow_logined" class="btn-group" style="display: none;">
-                <button type="button" class="btn btn-default dropdown-toggle content-title_logined green"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="glyphicon glyphicon-user" aria-hidden="true"></span> admin <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" style="min-width: auto;">
-                    <li><a id="btnLogOut" href="javascript:;">登出</a></li>
-                </ul>
-            </div>
+      <div id="contentTitle" class="content-title d-n">
+        <button
+          id="btnShow"
+          class="content-title_login blue"
+          href="javascript:;"
+          data-dialog="somedialog"
+          class="trigger"
+        >
+          登 录
+        </button>
+        <div id="btnShow_logined" class="btn-group" style="display: none;">
+          <button
+            type="button"
+            class="btn btn-default dropdown-toggle content-title_logined green"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+            admin <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" style="min-width: auto;">
+            <li><a id="btnLogOut" href="javascript:;">登出</a></li>
+          </ul>
         </div>
+      </div>
 
-        <div id="contentImgs">
-            <div style="position: relative;">
-                <section class="center slider">
-                    <div>
-                        <img src="../static/img/carousel/c1.jpg">
-                    </div>
-                    <div>
-                        <img src="../static/img/carousel/c2.jpg">
-                    </div>
-                    <div>
-                        <img src="../static/img/carousel/c3.jpg">
-                    </div>
-                    <div>
-                        <img src="../static/img/carousel/c4.jpg">
-                    </div>
-                    <div>
-                        <img src="../static/img/carousel/c5.jpg">
-                    </div>
-                </section>
-            </div>
-            <div id="uploadBox" class="upload-box d-n">
-                <i id="btnUpload" class="glyphicon glyphicon-plus-sign"></i>
-                <!-- The file input field used as target for the file upload widget -->
-                <div class="d-n"><input id="fileupload" type="file" name="img" accept=".jpg" multiple></div>
-            </div>
+      <div id="contentImgs">
+        <div style="position: relative;">
+          <section class="center slider" id="slider">
+          </section>
         </div>
-        <!-- 模态框（Modal） -->
-        <div id="somedialog" class="dialog my-dialog">
-            <div class="dialog__overlay"></div>
-            <div class="dialog__content">
-                <div class="login_logobox"><span class="glyphicon glyphicon-picture login_logo"></span></div>
-                <div style="display: none;"><button id="btnClose" class="action" data-dialog-close>Close</button></div>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user"
-                            aria-hidden="true"></span></span>
-                    <input name="username" type="text" class="form-control" placeholder="用户名"
-                        aria-describedby="basic-addon1">
-                </div>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-lock"
-                            aria-hidden="true"></span></span>
-                    <input name="password" type="password" class="form-control" placeholder="密码"
-                        aria-describedby="basic-addon1">
-                </div>
-                <button id="btnLogin" type="button" class="btn btn-default btn-block login-btn black">登录</button>
-            </div>
+        <div id="uploadBox" class="upload-box d-n">
+          <i id="btnUpload" class="glyphicon glyphicon-plus-sign"></i>
+          <!-- The file input field used as target for the file upload widget -->
+          <div class="d-n">
+            <input
+              id="fileupload"
+              type="file"
+              name="img"
+              accept=".jpg"
+              multiple
+            />
+          </div>
         </div>
+      </div>
+      <!-- 模态框（Modal） -->
+      <div id="somedialog" class="dialog my-dialog">
+        <div class="dialog__overlay"></div>
+        <div class="dialog__content">
+          <div class="login_logobox">
+            <span class="glyphicon glyphicon-picture login_logo"></span>
+          </div>
+          <div style="display: none;">
+            <button id="btnClose" class="action" data-dialog-close>
+              Close
+            </button>
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1"
+              ><span class="glyphicon glyphicon-user" aria-hidden="true"></span
+            ></span>
+            <input
+              name="username"
+              type="text"
+              class="form-control"
+              placeholder="用户名"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon" id="basic-addon1"
+              ><span class="glyphicon glyphicon-lock" aria-hidden="true"></span
+            ></span>
+            <input
+              name="password"
+              type="password"
+              class="form-control"
+              placeholder="密码"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+          <button
+            id="btnLogin"
+            type="button"
+            class="btn btn-default btn-block login-btn black"
+          >
+            登录
+          </button>
+        </div>
+      </div>
     </div>
-</body>
-<script src="../static/components/jquery.min.js"></script>
-<script src="../static/components/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-<!-- <script src="../static/components/bootstrap-fileinput/js/fileinput.min.js"></script>
+  </body>
+  <script src="../static/components/jquery.min.js"></script>
+  <script src="../static/components/bootstrap-3.3.7/js/bootstrap.min.js"></script>
+  <!-- <script src="../static/components/bootstrap-fileinput/js/fileinput.min.js"></script>
 <script src="../static/components/bootstrap-fileinput/js/fileinput_locale_zh.js"></script> -->
-<script src="../static/components/file-upload/jquery.ui.widget.js"></script>
-<script src="../static/components/file-upload/jquery.fileupload.js"></script>
-<script src="../static/components/DialogEffects/js/modernizr.custom.js"></script>
-<script src="../static/components/DialogEffects/js/classie.js"></script>
-<script src="../static/components/DialogEffects/js/dialogFx.js"></script>
-<script src="../static/components/picZoom.js"></script>
-<script src="../static/components/picLazyLoad.js"></script>
-<script src="../static/components/slick-master/slick/slick.js"></script>
-<script src="../static/js/index.js"></script>
-
+  <script src="../static/components/file-upload/jquery.ui.widget.js"></script>
+  <script src="../static/components/file-upload/jquery.fileupload.js"></script>
+  <script src="../static/components/DialogEffects/js/modernizr.custom.js"></script>
+  <script src="../static/components/DialogEffects/js/classie.js"></script>
+  <script src="../static/components/DialogEffects/js/dialogFx.js"></script>
+  <script src="../static/components/picZoom.js"></script>
+  <script src="../static/components/picLazyLoad.js"></script>
+  <script src="../static/components/slick-master/slick/slick.js"></script>
+  <script src="../static/js/index.js"></script>
 </html>

@@ -87,6 +87,9 @@
     $menu.delegate('li.menu-cont_title', 'click', function() {
       var $li = $(this);
       var menuId = $li.attr('data-menuId');
+      if (!menuId) {
+        return;
+      }
       var $uploadBox = $('#uploadBox');
       var $contentImgs = $('#contentImgs');
       $menu.find('.li-selected').removeClass('li-selected');
@@ -495,6 +498,15 @@
       .find('.menu-cont_title')
       .first()
       .trigger('click');
+
+    // 滚动图片数量
+    var picNum = 24;
+    var $slider = $('#slider');
+    for (var i = 1; i <= picNum; i++) {
+      $slider.append(`<div>
+      <img src="../static/img/carousel/c (${i}).jpg" />
+    </div>`);
+    }
 
     // 图片滚动
     $('.center').slick({

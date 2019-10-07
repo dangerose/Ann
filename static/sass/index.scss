@@ -258,6 +258,21 @@ body {
     }
 }
 
+.menu__bottom {
+    position: absolute;
+    bottom: -164px;
+    left: 5px;
+    cursor: pointer;
+}
+
+/* 手机 */
+@media screen and (max-device-width: 1024px){
+    .menu__bottom {
+        left: 5px;
+        bottom: -129px;
+    }
+}
+
 .li-selected {
     p {
         text-decoration: none!important;
