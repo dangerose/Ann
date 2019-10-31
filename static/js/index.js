@@ -90,6 +90,7 @@
       if (!menuId) {
         return;
       }
+
       var $uploadBox = $('#uploadBox');
       var $contentImgs = $('#contentImgs');
       $menu.find('.li-selected').removeClass('li-selected');
@@ -97,6 +98,21 @@
 
       //清空
       $contentImgs.find('.content-img_box').remove();
+      $contentImgs.find('.content-img_text').remove();
+
+      if (menuId === 'menu12') {
+        // 联系我们
+        $contentImgs.append(`
+        <div class="content-img_text" style="font-size: 12px">
+        <p>南视觉影像工作室隶属于南京大藤摄影有限公司，是专门从事空间类摄影的工作室。</p>
+
+        <p>联系地址：南京市鼓楼区新民路72号104室   蔡振铭  </p>
+
+        <p>联系方式：17551400319</p>
+        </div>
+        `)
+        return
+      }
 
       // 获取资源
       $.get('/get_img_path?menuId=' + menuId, function(data) {
@@ -500,7 +516,7 @@
       .trigger('click');
 
     // 滚动图片数量
-    var picNum = 24;
+    var picNum = 6;
     var $slider = $('#slider');
     for (var i = 1; i <= picNum; i++) {
       $slider.append(`<div>
