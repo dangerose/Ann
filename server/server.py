@@ -8,7 +8,7 @@ import tornado.web
 from tornado.options import options, define
 from PIL import Image
 
-define("port", default=8080, help="running on given port", type=int)
+define("port", default=8081, help="running on given port", type=int)
 define("username", default="admin", help="user name", type=str)
 define("passwd", default="ann123456", help="password", type=str)
 
