@@ -1,5 +1,5 @@
-body {
-    
+html, body {
+    height: 100%;
 }
 
 .menu {
@@ -16,7 +16,7 @@ body {
 }
 
 .content {
-    height: 100%;
+    min-height: 100%;
     margin: 0 0 0 250px;
     top: 0;
     padding: 11px 150px 25px 40px;
@@ -428,4 +428,19 @@ body {
 
 .slick-current {
   opacity: 1;
+}
+
+
+.footer {
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+
+    > a {
+        color: rgba(0,0,0,.5);
+        &:hover {
+            color: #337ab7;
+        }
+    }
 }
