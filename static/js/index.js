@@ -70,6 +70,20 @@
                     view.toViewOrEdit();
                 }
             });
+
+            // fake
+            var data = '{"status": "ok", "msg": "success", "data": [{"picId": "mini_menu01_009.jpg", "size": "150*99"}, {"picId": "menu01_014.jpg", "size": "200*133"}, {"picId": "mini_menu01_015.jpg", "size": "200*150"}, {"picId": "menu01_005.jpg", "size": "1280*800"}, {"picId": "mini_menu01_004.jpg", "size": "266*150"}, {"picId": "menu01_008.jpg", "size": "200*133"}, {"picId": "mini_menu01_011.jpg", "size": "150*99"}, {"picId": "mini_menu01_008.jpg", "size": "150*99"}, {"picId": "mini_menu01_010.jpg", "size": "150*99"}, {"picId": "mini_menu01_002.jpg", "size": "200*150"}, {"picId": "menu01_016.jpg", "size": "200*133"}, {"picId": "menu01_003.jpg", "size": "2560*1440"}, {"picId": "mini_menu01_006.jpg", "size": "187*150"}, {"picId": "menu01_015.jpg", "size": "200*133"}, {"picId": "menu01_009.jpg", "size": "200*133"}, {"picId": "mini_menu01_016.jpg", "size": "150*99"}, {"picId": "mini_menu01_019.jpg", "size": "240*150"}, {"picId": "mini_menu01_005.jpg", "size": "240*150"}, {"picId": "menu01_004.jpg", "size": "1366*768"}, {"picId": "mini_menu01_001.jpg", "size": "266*150"}, {"picId": "mini_menu01_003.jpg", "size": "266*150"}, {"picId": "menu01_007.jpg", "size": "200*158"}, {"picId": "menu01_012.jpg", "size": "200*133"}, {"picId": "menu01_013.jpg", "size": "200*133"}, {"picId": "menu01_011.jpg", "size": "200*133"}, {"picId": "mini_menu01_017.jpg", "size": "155*150"}, {"picId": "menu01_010.jpg", "size": "200*133"}, {"picId": "mini_menu01_012.jpg", "size": "150*99"}, {"picId": "mini_menu01_007.jpg", "size": "189*150"}, {"picId": "menu01_019.jpg", "size": "2560*1600"}, {"picId": "menu01_018.jpg", "size": "2560*1600"}, {"picId": "mini_menu01_013.jpg", "size": "200*150"}, {"picId": "mini_menu01_018.jpg", "size": "240*150"}, {"picId": "menu01_002.jpg", "size": "200*133"}, {"picId": "menu01_001.jpg", "size": "2560*1440"}, {"picId": "menu01_006.jpg", "size": "200*160"}, {"picId": "menu01_017.jpg", "size": "750*723"}, {"picId": "mini_menu01_014.jpg", "size": "150*99"}]}'
+            data = JSON.parse(data)
+            data.data.forEach(function (ele) {
+                if (ele.picId.substr(0, 4) === 'mini') {
+                    var html = '<div class="content-img_box">\
+                                    <img data-picId="'+ ele.picId + '" class="content-img" src="http://www.jf-photo.cn/static/img/' + menuId + '/' + ele.picId + '" alt="">\
+                                    <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>\
+                                </div>';
+                    $uploadBox.before(html);
+                }
+            });
+            view.toViewOrEdit();
         });
 
         // 图片点击事件
@@ -333,6 +347,8 @@
         initFileInput();
         $('#menu').find('.menu-cont_title').first().trigger('click');
     }
+
+    var swiper = new Swiper('.swiper-container');
 
     init();
 })()
