@@ -70,6 +70,11 @@ a:hover {
     left: 0;
 }
 
+.zoom-content {
+    height: unset;
+    width: unset;
+}
+
 .zoom-overlay {
     position: fixed;
     height: 100%;
@@ -83,7 +88,7 @@ a:hover {
 .zoom-pic {
     max-width: 60%;
     max-height: 60%;
-    margin: 150px auto;
+    margin: 100px auto 80px;
     display: block;
     cursor: pointer;
 }
@@ -92,6 +97,185 @@ a:hover {
     margin: 0 auto;
     display: block;
     position: absolute;
-    top: calc(45% - 8px);
-    left: calc(50% - 8px);
+    width: 20px;
+    height: 20px;
+    top: calc(45% - 10px);
+    left: calc(50% - 10px);
+}
+
+.zoom-mini-pic-list {
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+
+.zoom-mini-pic-item {
+    width: 10%;
+    padding: 20px 10px 0 0;
+
+    img {
+        width: 100%;
+        cursor: pointer;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* animate */
+/*当前元素设置相对定位*/
+.ech-fade, .ech-fade-t, .ech-fade-b, .ech-fade-l, .ech-fade-r, .ech-fade-c-in, .ech-fade-m-in, .ech-fade-m-out, .ech-fade-c-out, .ech-bounce-t, .ech-bounce-b, .ech-bounce-r, .ech-bounce-l {
+    position: relative;
+    transition: all .3s;
+    z-index: 1;
+}
+/*当前元素的:before和:after设置绝对定位*/
+.ech-fade:before, .ech-fade-t:before, .ech-fade-b:before, .ech-fade-l:before, .ech-fade-r:before, .ech-fade-c-in:before, .ech-fade-m-in:before, .ech-fade-m-out:before, .ech-fade-c-in:after, .ech-fade-m-in:after, .ech-fade-c-out:before {
+    position: absolute;
+    transition: all .3s;
+    content: "";
+    display: block;
+    background: rgba(0,0,0, .4);
+    z-index: 0;
+    width: 100%;
+    height: 100%;
+}
+/*弹跳元素:before和:after设置绝对定位和运动曲线*/
+.ech-bounce-t:before, .ech-bounce-b:before, .ech-bounce-r:before, .ech-bounce-l:before {
+    transition: all .3s;
+    transition-timing-function: cubic-bezier(0.52, 1.7, 0.5, 0.4);
+    position: absolute;
+    content: "";
+    display: block;
+    background: rgba(0,0,0, .4);
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+}
+/*背景颜色和文字变化*/
+.ech-fade:before {
+    top: 0;
+    left: 0;
+    transform: scaleX(1);
+    opacity: 0;
+}
+.ech-fade:hover:before {
+    opacity: 1;
+}
+/*颜色从左至右变化*/
+.ech-fade-l:before, .ech-bounce-l:before {
+    top: 0;
+    right: 0;
+    transform-origin: 0 50%;
+    transform: scaleX(0);
+}
+/*颜色从右至左变化*/
+.ech-fade-r:before, .ech-bounce-r:before {
+    top: 0;
+    left: 0;
+    transform-origin: 100% 50%;
+    transform: scaleX(0);
+}
+/*颜色从上往下变化*/
+.ech-fade-t:before, .ech-bounce-t:before {
+    bottom: 0;
+    left: 0;
+    transform-origin: 50% 0;
+    transform: scaleY(0);
+}
+/*颜色从下往上变化*/
+.ech-fade-b:before, .ech-bounce-b:before {
+    top: 0;
+    left: 0;
+    transform-origin: 50% 100%;
+    transform: scaleY(0);
+}
+/*颜色垂直居中出去*/
+.ech-fade-m-out:before {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    transform: scaleY(0);
+}
+/*水平居中出去*/
+.ech-fade-c-out:before {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    transform: scaleX(0);
+}
+.ech-fade-c-out:hover:before {
+    transform: scaleX(1);
+}
+/*水平居中进来*/
+.ech-fade-c-in:before {
+    top: 0;
+    left: 0;
+    transform-origin: 0 50%;
+    transform: scaleX(0.5);
+}
+.ech-fade-c-in:after {
+    top: 0;
+    right: 0;
+    transform-origin: 100% 50%;
+    transform: scaleX(0.5);
+}
+/*垂直居中进来*/
+.ech-fade-m-in:before {
+    top: 0;
+    left: 0;
+    transform-origin: 50% 0;
+    transform: scaleY(0);
+}
+.ech-fade-m-in:after {
+    bottom: 0;
+    left: 0;
+    transform-origin: 50% 100%;
+    transform: scaleY(0);
+}
+/*当前元素文字颜色变化*/
+.ech-fade:hover, .ech-fade-t:hover, .ech-fade-b:hover, .ech-fade-l:hover, .ech-fade-r:hover, .ech-fade-c-in:hover, .ech-fade-m-in:hover, .ech-fade-m-out:hover, .ech-fade-c-out:hover, .ech-bounce-t:hover, .ech-bounce-b:hover, .ech-bounce-r:hover, .ech-bounce-l:hover {
+    color: #fff;
+}
+/*垂直方向进来的:before变化（一半）*/
+.ech-fade-m-in:hover:before, .ech-fade-m-in:hover:after {
+    transform: scaleY(.51);
+}
+/*垂直方向进来的:before变化*/
+.ech-fade-t:hover:before, .ech-fade-b:hover:before, .ech-fade-m-out:hover:before, .ech-bounce-b:hover:before, .ech-bounce-t:hover:before {
+    transform: scaleY(1);
+}
+/*水平方向进来的:before变化（一半）*/
+.ech-fade-c-in:hover:before, .ech-fade-c-in:hover:after {
+    transform: scaleX(0);
+}
+/*水平方向进来的:before变化*/
+.ech-fade-l:hover:before, .ech-fade-r:hover:before,.ech-fade-c-out:hover:before, .ech-bounce-l:hover:before, .ech-bounce-r:hover:before {
+    transform: scaleX(1);
 }

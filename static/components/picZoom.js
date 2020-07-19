@@ -1,7 +1,6 @@
 /* 图片放大插件 */
 (function() {
     function picZoom () {
-
     }
 
     picZoom.prototype.show = function(url) {
@@ -11,37 +10,30 @@
     }
     picZoom.prototype.hide = function() {
         $('body').css('overflow', 'auto');
-        this._clear();
+        $('#zoom').addClass('d-n');
     }
 
     // 清除
     picZoom.prototype._clear = function() {
-        var $picZooms = $('body').find('.zoom');
-        $picZooms.remove();
+        /* var $picZooms = $('body').find('.zoom');
+        $picZooms.remove(); */
     }
     // 添加
     picZoom.prototype._add = function(url) {
         var self = this;
         var $body = $('body');
-        var $newZoom = $('\
-            <div class="zoom">\
-                <div class="zoom-overlay"></div>\
-                <div class="zoom-content d-n" id="zoomContent">\
-                    <img class="zoom-pic" src="'+ url +'"/>\
-                </div>\
-                <div class="zoom-load" id="zoomLoad">\
-                    <img class="zoom-loadicon" src="../static/img/loading.gif"/>\
-                </div>\
-            </div>\
-        ');
-        $newZoom.on('click', function() {
+        var $newZoom = $('#zoom');
+        var $overLay = $('.zoom-overlay');
+        var $pic = $('.zoom-pic');
+        $newZoom.removeClass('d-n');
+        $newZoom.click(function() {
             self.hide();
         });
-        $newZoom.find('.zoom-pic').attr('onload', function() {
-            $newZoom.find('.zoom-content').removeClass('d-n');
+        $pic.attr('onload', function() {
+            $pic.removeClass('d-n');
             $newZoom.find('.zoom-load').addClass('d-n');
         });
-        $body.append($newZoom);
+        $pic.attr('src', url);
         /* $('.zoom-overlay').fadeTo(100, 0.9); */
     }
 
