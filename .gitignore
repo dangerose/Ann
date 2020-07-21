@@ -2,3 +2,4 @@ node_modules
 .idea
 .vscode
 .pytest_cache
+static/img/menu*

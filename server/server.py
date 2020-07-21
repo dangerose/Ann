@@ -4,6 +4,7 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.options
 import tornado.web
+import pymysql.cursors
 
 from tornado.options import options, define
 from PIL import Image
@@ -11,6 +12,26 @@ from PIL import Image
 define("port", default=8081, help="running on given port", type=int)
 define("username", default="admin", help="user name", type=str)
 define("passwd", default="ann123456", help="password", type=str)
+
+# 连接数据库
+connect = pymysql.Connect(
+    host='101.132.227.116',
+    port=3306,
+    user='root',
+    passwd='Hh7664575',
+    db='zhengming',
+    charset='utf8'
+)
+
+sqlQueryMax = "select max(num) from picjf where menuId = '%s'"
+sqlQueryByMenu = "select * from picjf where menuId = '%s' ORDER BY num"
+sqlQueryByPicId = "select * from picjf where picId = '%s'"
+sqlInsert = "INSERT INTO picjf (picId, name, num, path, size, menuId) VALUES ( '%s', '%s', '%d', '%s', '%s', '%s' )"
+sqlDel = "DELETE FROM picjf WHERE picId = '%s'"
+sqlSortDown = "UPDATE picjf SET num = num - 1 WHERE num > %d"
+
+# 获取游标
+cursor = connect.cursor()
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -49,7 +70,6 @@ class LoginHandler(BaseHandler):
 
 class UploadHandler(BaseHandler):
     def post(self, *args, **kwargs):
-        print('posting')
         menuId = self.get_argument('menuId', '/')
         picId = self.get_argument('picId', 'hello')
         file_imgs = self.request.files['img']
@@ -84,6 +104,19 @@ class UploadHandler(BaseHandler):
                 print('new {0} * 150'.format(width))
                 mini_img = img.resize(new_size,Image.BILINEAR)
                 mini_img.save(min_img)
+
+                # 查询最大排序
+                cursor.execute(sqlQueryMax % (menuId))
+                results = cursor.fetchall()
+                max_num = 0
+                for row in results:
+                    if row[0] is not None:
+                        max_num = row[0] + 1
+                # 插入表中
+                data = (picId, picId, max_num, save_to, new_size, menuId)
+                cursor.execute(sqlInsert % data)
+                connect.commit()
+                print('成功插入', cursor.rowcount, '条数据')
                 
 
         except Exception as e:
@@ -99,13 +132,11 @@ class UploadHandler(BaseHandler):
 class DeleteHandler(BaseHandler):
     def get(self, *args, **kwargs):
         menuId = self.get_argument('menuId', None)
-        picId = self.get_argument('picId', None)
+        miniPicId = self.get_argument('picId', None)
         miniChar = 'mini_'
-        file_path = '../static/img/{0}/{1}'.format(menuId, picId)
-        full_path = ''
-
-        if miniChar in picId:
-            full_path = file_path.replace(miniChar, '')
+        picId = miniPicId.replace(miniChar, '')
+        file_path = '../static/img/{0}/{1}'.format(menuId, miniPicId)
+        full_path = '../static/img/{0}/{1}'.format(menuId, picId)
 
         return_status = {
             "status": None,
@@ -113,6 +144,17 @@ class DeleteHandler(BaseHandler):
         }
 
         try:
+            # 查出序号
+            cursor.execute(sqlQueryByPicId % picId)
+            picInfo = cursor.fetchone()
+            picNum = picInfo[2]
+            # 删除数据库行
+            cursor.execute(sqlDel % picId)
+            connect.commit()
+            # 更新其它排序
+            cursor.execute(sqlSortDown % picNum)
+            connect.commit()
+            # 删除文件
             if os.path.exists(file_path):
                 os.remove(file_path)
                 if os.path.exists(full_path):
@@ -152,23 +194,42 @@ class GetPathHandler(BaseHandler):
             self.finish(return_data)
             return
         try:
-            files = os.listdir(menu_path)
-            for f in files:
-                if not os.path.isdir(f):
-                    file_path = '{0}{1}'.format(menu_path, f)
-                    print('****opening file %s', file_path)
-                    img = Image.open(file_path)
-                    img_size = img.size
-                    min_size = min(img_size)
-                    max_size = max(img_size)
-                    data = {}
-                    picId = str(f)
-                    size = "{0}*{1}".format(str(max_size), str(min_size)) 
-                    data['picId'] = picId
-                    data['size'] = '{0}*{1}'.format(max_size,min_size)
-                    return_data['status'] = 'ok'
-                    return_data['msg'] = 'success'
-                    return_data['data'].append(data)
+            cursor.execute(sqlQueryByMenu % (menuId))
+            table = cursor.fetchall()
+            for row in table:
+                if row[0] is not None:
+                    file_path = row[3]
+                    if os.path.exists(file_path):
+                        img = Image.open(file_path)
+                        img_size = img.size
+                        min_size = min(img_size)
+                        max_size = max(img_size)
+                        data = {}
+                        picId = row[0]
+                        size = "{0}*{1}".format(str(max_size), str(min_size))
+                        data['picId'] = picId
+                        data['num'] = row[2]
+                        data['size'] = '{0}*{1}'.format(max_size,min_size)
+                        return_data['status'] = 'ok'
+                        return_data['msg'] = 'success'
+                        return_data['data'].append(data)
+            # files = os.listdir(menu_path)
+            # for f in files:
+            #     if not os.path.isdir(f):
+            #         file_path = '{0}{1}'.format(menu_path, f)
+            #         print('****opening file %s', file_path)
+            #         img = Image.open(file_path)
+            #         img_size = img.size
+            #         min_size = min(img_size)
+            #         max_size = max(img_size)
+            #         data = {}
+            #         picId = str(f)
+            #         size = "{0}*{1}".format(str(max_size), str(min_size))
+            #         data['picId'] = picId
+            #         data['size'] = '{0}*{1}'.format(max_size,min_size)
+            #         return_data['status'] = 'ok'
+            #         return_data['msg'] = 'success'
+            #         return_data['data'].append(data)
 
         except Exception as e:
             return_data['status']='fail'

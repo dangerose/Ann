@@ -39,8 +39,10 @@
         }
     };
 
+    var menuPicData = []
+
     // 绑定事件
-    function bindEvents() {
+    function bindEvents () {
         // 菜单点击事件
         var $menu = $('#menu');
         $menu.delegate('li.menu-cont_title', 'click', function () {
@@ -58,38 +60,24 @@
             $.get("/get_img_path?menuId=" + menuId, function (data) {
                 if (data.status === 'ok') {
                     // 加载图片
+                    menuPicData = data.data
                     data.data.forEach(function (ele) {
-                        if (ele.picId.substr(0, 4) === 'mini') {
-                            var html = '<div class="content-img_box">\
-                                            <img data-picId="'+ ele.picId + '" class="content-img" src="../static/img/' + menuId + '/' + ele.picId + '" alt="">\
+                        var html = '<div class="content-img_box">\
+                                            <img data-picId="mini_'+ ele.picId + '" class="content-img" src="../static/img/' + menuId + '/mini_' + ele.picId + '" alt="">\
                                             <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>\
                                         </div>';
-                            $uploadBox.before(html);
-                        }
+                        $uploadBox.before(html);
                     });
                     view.toViewOrEdit();
                 }
             });
-
-            data = JSON.parse(data)
-            data.data.forEach(function (ele) {
-                if (ele.picId.substr(0, 4) === 'mini') {
-                    var html = '<div class="content-img_box">\
-                                    <img data-picId="'+ ele.picId + '" class="content-img" src="http://www.jf-photo.cn/static/img/' + menuId + '/' + ele.picId + '" alt="">\
-                                    <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>\
-                                </div>';
-                    $uploadBox.before(html);
-                }
-            });
-            view.toViewOrEdit();
         });
 
         // 图片点击事件
         var $contentImgs = $('#contentImgs');
         $contentImgs.delegate('img', 'click', function () {
             var $img = $(this);
-            $picZoom.show($img.attr('src').replace('mini_', ''));
-            /* initSwiper(); */
+            $picZoom.show($img.attr('src').replace('mini_', ''), menuPicData);
         });
 
         // 图片删除事件
@@ -150,7 +138,7 @@
         });
     }
 
-    function filetoDataURL(file, fn) {
+    function filetoDataURL (file, fn) {
         var reader = new FileReader();
         reader.onloadend = function (e) {
             fn(e.target.result);
@@ -161,7 +149,7 @@
     // 改变视图
     var view = {
         // 定义根元素html的font-size
-        defineRem: function() {
+        defineRem: function () {
             //var screenH = window.screen.height; // 分辨率
             //$('html').css('font-size', screenH / 100);
         },
@@ -243,7 +231,7 @@
         }
     }) */
 
-    function initFileInput() {
+    function initFileInput () {
         var $uploadBox = $('#uploadBox');
         var $fileupload = $('#fileupload');
 
@@ -296,7 +284,7 @@
                     var $html = $img.parent();
                     var curMenuId = data.formData.menuId;
                     var newPicId = data.formData.picId;
-                    filetoDataURL(data.files[0], function(dataUrl) {
+                    filetoDataURL(data.files[0], function (dataUrl) {
                         $html.find('img').attr('src', dataUrl);
                     });
                     $html.removeAttr('id').removeAttr('data-curMenuId').removeAttr('data-newPicId');
@@ -317,7 +305,7 @@
 
     }
 
-    function findMaxNum() {
+    function findMaxNum () {
         var $imgs = $('#contentImgs').find('.content-img');
         var maxNum = 0;
 
@@ -338,7 +326,7 @@
         return result;
     }
 
-    function init() {
+    function init () {
         view.defineRem();
         bindEvents();
         view.toViewOrEdit();
@@ -347,7 +335,7 @@
         $('#menu').find('.menu-cont_title').first().trigger('click');
     }
 
-    function initSwiper() {
+    function initSwiper () {
         var swiper = new Swiper('.swiper-container');
     }
 

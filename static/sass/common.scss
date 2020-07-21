@@ -60,10 +60,20 @@ a:hover {
     left: 0;
     z-index: 999999;
     background: transparent;
+    animation: zoomAni .5s;
+}
+
+@keyframes zoomAni {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .zoom-content, .zoom-load {
-    position: absolute;
+    position: fixed;
     height: 100%;
     width: 100%;
     top: 0;
@@ -71,8 +81,8 @@ a:hover {
 }
 
 .zoom-content {
-    height: unset;
-    width: unset;
+    /* height: unset;
+    width: unset; */
 }
 
 .zoom-overlay {
@@ -87,10 +97,16 @@ a:hover {
 
 .zoom-pic {
     max-width: 60%;
-    max-height: 60%;
-    margin: 100px auto 80px;
+    min-height: 60%;
+    margin: 150px auto;
     display: block;
     cursor: pointer;
+}
+
+.zoom-pic--mini {
+    height: 50%;
+    min-height: unset;
+    margin: 100px auto 80px;
 }
 
 .zoom-loadicon {
