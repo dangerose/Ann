@@ -41,6 +41,59 @@
 
     var menuPicData = []
 
+    function removePicData (picId) {
+        for (var index = 0; index < menuPicData.length; index++) {
+            var element = menuPicData[index];
+            if (element.picId === picId) {
+                menuPicData.splice(index, 1)
+                break;
+            }
+        }
+        menuPicData.forEach(function (item, i) {
+            item.num = i
+        })
+        console.log('remove ', menuPicData)
+    }
+
+    function addPicData (picId) {
+        menuPicData.push({
+            picId: picId,
+            size: '',
+            num: menuPicData.length === 0 ? 0 : (menuPicData[menuPicData.length - 1].num + 1)
+        })
+        console.log('add ',menuPicData)
+    }
+
+    function sortPicAfterDrag () {
+        var $pics = $('.content-img_box')
+        var newArr = []
+        $pics.each(function (i) {
+            var $pic = $(this)
+            let picId = $pic.find('.content-img').attr('data-picId').replace('mini_', '')
+            for (var index = 0; index < menuPicData.length; index++) {
+                var element = menuPicData[index];
+                if (element.picId === picId) {
+                    element.num = i
+                    newArr.push(element)
+                    break
+                }
+            }
+        })
+        menuPicData = newArr
+        console.log('drag ',menuPicData)
+        $.ajax({
+            type: 'post',
+            url:'/resort_img',
+            contentType:'application/json',
+            data:{
+               picData: JSON.stringify(menuPicData)
+            },
+            dataType:'json',
+            success:function (data) {
+            }
+        }) 
+    }
+
     // 绑定事件
     function bindEvents () {
         // 菜单点击事件
@@ -63,9 +116,11 @@
                     menuPicData = data.data
                     data.data.forEach(function (ele) {
                         var html = '<div class="content-img_box">\
+                                        <div class="content-img_wrap">\
                                             <img data-picId="mini_'+ ele.picId + '" class="content-img" src="../static/img/' + menuId + '/mini_' + ele.picId + '" alt="">\
                                             <div class="content-img_layer"><span class="glyphicon glyphicon-remove content-img_remove"></span></div>\
-                                        </div>';
+                                        </div>\
+                                    </div>';
                         $uploadBox.before(html);
                     });
                     view.toViewOrEdit();
@@ -84,13 +139,14 @@
         $contentImgs.delegate('.content-img_remove', 'click', function () {
             var $iconRemove = $(this);
             var $img = $iconRemove.parent().siblings('img');
-            var picId = $img.attr('data-picId');
+            var miniPicId = $img.attr('data-picId');
+            var picId = miniPicId.replace('mini_', '');
             var $menu = $('#menu');
             var $curSel = $menu.find('.li-selected');
             var $contentBox = $iconRemove.parents('.content-img_box');
-
-            $.get("/delete_img?picId=" + picId + "&menuId=" + $curSel.attr('data-menuId'), function (data, status) {
-                $contentBox.remove();
+            $contentBox.remove();
+            removePicData(picId);
+            $.get("/delete_img?picId=" + miniPicId + "&menuId=" + $curSel.attr('data-menuId'), function (data, status) {
             });
         });
 
@@ -168,6 +224,7 @@
                     $uploadBox.removeClass('d-n');
                     // 显示图片删除按钮
                     $imgDelLayer.removeClass('d-n');
+                    window.drags('content-img_box', 'div-dash', 'dash', sortPicAfterDrag);
                 }
                 else {
                     // 隐藏上传按钮
@@ -261,18 +318,20 @@
 
                         // 增加到页面   文件名是唯一的可以作为id
                         var html = '<div class="content-img_box">\
-                                        <img data-picId="mini_'+ newPicId + '" class="content-img" src="" alt="" height="133" width="133">\
-                                        <div class="content-img_layer t-0">\
-                                            <div class="progress content-img_progress">\
-                                                <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 5%">\
-                                                    <span class="sr-only">Complete</span>\
+                                        <div class="content-img_wrap">\
+                                            <img data-picId="mini_'+ newPicId + '" class="content-img" src="" alt="" height="133" width="133">\
+                                            <div class="content-img_layer t-0">\
+                                                <div class="progress content-img_progress">\
+                                                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="width: 5%">\
+                                                        <span class="sr-only">Complete</span>\
+                                                    </div>\
                                                 </div>\
                                             </div>\
                                         </div>\
                                     </div>';
                         $html = $(html);
                         $html.find('img').on('load', function () {
-                            $(this).width('auto');
+                            $(this).removeAttr('height').removeAttr('width');
                             $html.find('.content-img_layer').removeClass('t-0');
                             $html.find('.content-img_layer').html('<span class="glyphicon glyphicon-remove content-img_remove"></span>');
                         });
@@ -285,10 +344,12 @@
                     var curMenuId = data.formData.menuId;
                     var newPicId = data.formData.picId;
                     filetoDataURL(data.files[0], function (dataUrl) {
-                        $html.find('img').attr('src', dataUrl);
+                        $html.find('img').attr('src', '../static/img/' + curMenuId + '/mini_' + newPicId + '?' + new Date().getTime());
                     });
                     $html.removeAttr('id').removeAttr('data-curMenuId').removeAttr('data-newPicId');
                     console.log('done');
+                    addPicData(newPicId);
+                    window.drags('content-img_box', 'div-dash', 'dash', sortPicAfterDrag);
                 },
                 progress: function (e, data) {
                     var $img = $('[data-picId="mini_' + data.formData.picId + '"]');

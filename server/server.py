@@ -7,6 +7,7 @@ import tornado.web
 import pymysql.cursors
 
 from tornado.options import options, define
+from urllib import parse
 from PIL import Image
 
 define("port", default=8081, help="running on given port", type=int)
@@ -41,6 +42,7 @@ class Application(tornado.web.Application):
             (r"/upload_img", UploadHandler),
             (r"/delete_img", DeleteHandler),
             (r"/get_img_path", GetPathHandler),
+            (r"/resort_img", reSortHandler),
             (r"/static/(.*)", StaticHandler, {'path': os.path.join(os.path.dirname(__file__), "../static")})
         ]
         settings = dict(
@@ -213,23 +215,6 @@ class GetPathHandler(BaseHandler):
                         return_data['status'] = 'ok'
                         return_data['msg'] = 'success'
                         return_data['data'].append(data)
-            # files = os.listdir(menu_path)
-            # for f in files:
-            #     if not os.path.isdir(f):
-            #         file_path = '{0}{1}'.format(menu_path, f)
-            #         print('****opening file %s', file_path)
-            #         img = Image.open(file_path)
-            #         img_size = img.size
-            #         min_size = min(img_size)
-            #         max_size = max(img_size)
-            #         data = {}
-            #         picId = str(f)
-            #         size = "{0}*{1}".format(str(max_size), str(min_size))
-            #         data['picId'] = picId
-            #         data['size'] = '{0}*{1}'.format(max_size,min_size)
-            #         return_data['status'] = 'ok'
-            #         return_data['msg'] = 'success'
-            #         return_data['data'].append(data)
 
         except Exception as e:
             return_data['status']='fail'
@@ -237,6 +222,38 @@ class GetPathHandler(BaseHandler):
             
         finally:
             self.finish(return_data)
+
+class reSortHandler(BaseHandler):
+    def post(self, *args, **kwargs):
+        body = self.request.body
+        args = dict([x.split('=') for x in body.decode().split('&')])
+        pic_data = args.get('picData')
+        pic_data = parse.unquote(pic_data)
+        pic_data = json.loads(pic_data)
+
+        return_status = {
+            "status": None,
+            "msg": None
+        }
+
+        sql = 'UPDATE picjf SET num = case picId'
+        try:
+            for pic in pic_data:
+                sql = sql + ' WHEN \'' + pic['picId'] + '\' THEN ' + str(pic['num'])
+            sql = sql + ' END'
+            cursor.execute(sql)
+            connect.commit()
+            return_status["status"] = "ok"
+            return_status["msg"] = "success"
+
+        except Exception as e:
+            return_status["status"] = "fail"
+            return_status["msg"] = str(e)
+            print(e)
+
+        finally:
+            self.finish(return_status)
+
 
 class StaticHandler(tornado.web.StaticFileHandler):
     def set_extra_headers(self, path):

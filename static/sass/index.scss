@@ -65,17 +65,22 @@ body {
 
 .content-img_box {
     display: inline-block;
-    position: relative;
     transition: all 100ms ease-in;
     overflow: hidden;
-    padding: 10px 10px 0 0;
+    padding: 0px 10px 10px 0;
     width: 25%;
 
     &:hover {
-        & > .content-img_layer {
+        & .content-img_layer {
             top: 0;
         }
     }
+}
+
+.content-img_wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
 .content-img_progress {
@@ -279,7 +284,7 @@ body {
     border-radius: 4px;
     box-shadow: 0 0 4px grey;
     transition: box-shadow 200ms ease-in-out;
-    margin: 10px 10px 0 0;
+    margin: 0 10px 10px 0;
     cursor: pointer;
     &:hover {
         box-shadow: 0 0 10px #66afe9;

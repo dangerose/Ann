@@ -49,7 +49,26 @@ a:hover {
     }
 }
 
+/* drag */
+.div-dash {
+    position: absolute;
+    border: 1px solid #ddd;
+    opacity: 0.7;
+    z-index: 1000000;
 
+    .content-img_layer {
+        display: none;
+    }
+}
+
+.dash {
+    display: inline-block;
+    width: calc(25% - 1px);
+    > div {
+        outline: 1px dashed #f00;
+        height: 100%;
+    }
+}
 
 /* ------- 图片放大插件 ----- */
 .zoom {
