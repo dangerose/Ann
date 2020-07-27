@@ -65,8 +65,12 @@
 
     picZoom.prototype._addMiniPic = function (picData) {
         var $zoomMiniPicList = $('#zoomMiniPicList')
+        var count = 1
         picData.forEach(element => {
             var menuId = element.picId.split('_')[0]
+            if (count > 20) {
+                return
+            }
             $zoomMiniPicList.append(`
                 <div class="zoom-mini-pic-item">
                     <div class="ech-fade-c-in">
@@ -74,6 +78,7 @@
                     </div>
                 </div>
             `)
+            count++
         });
     }
 

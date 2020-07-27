@@ -236,11 +236,13 @@ class reSortHandler(BaseHandler):
             "msg": None
         }
 
-        sql = 'UPDATE picjf SET num = case picId'
+        sql = 'UPDATE picjf SET num = CASE picId'
         try:
+            pic_id_list = []
             for pic in pic_data:
                 sql = sql + ' WHEN \'' + pic['picId'] + '\' THEN ' + str(pic['num'])
-            sql = sql + ' END'
+                pic_id_list.append('\'' + pic['picId'] + '\'')
+            sql = sql + ' END WHERE picId IN (' + ','.join(pic_id_list) + ')'
             cursor.execute(sql)
             connect.commit()
             return_status["status"] = "ok"
