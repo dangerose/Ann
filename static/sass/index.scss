@@ -36,9 +36,14 @@ body {
 }
 
 .content-title {
-    text-align: right;
-    margin: 0 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
     border-bottom: 1px solid #eee;
+}
+
+.breadcrumb {
+    margin: 8px 0;
 }
 
 .content-title_login {
@@ -93,7 +98,7 @@ body {
 .content-img_layer {
     background-color: rgba(55, 58, 71, 0.9);
     width: 100%;
-    height: 100%;
+    height: 35%;
     position: absolute;
     top: -100%;
     transition: all 100ms ease;
@@ -101,9 +106,9 @@ body {
 
 .content-img_remove {
     position: absolute;
-    top: calc(50% - 16px);
-    right: calc(50% - 16px);
-    font-size: 32px;
+    font-size: 26px;
+    left: calc(25% - 13px);
+    top: calc(50% - 13px);
     font-weight: bold;
     cursor: pointer;
     color: rgb(217, 84, 79);
@@ -112,6 +117,83 @@ body {
     &:hover {
         text-shadow: 0px 0 5px;
     }
+}
+.content-img_setMain {
+    position: absolute;
+    font-size: 26px;
+    right: calc(25% - 13px);
+    top: calc(50% - 13px);
+    font-weight: bold;
+    cursor: pointer;
+    color: #5ab85c;
+    transition: all 150ms ease-in;
+
+    &:hover {
+        text-shadow: 0px 0 5px;
+    }
+}
+.main-img {
+    border: 5px solid #5ab85c;
+}
+.content-project {
+    cursor: pointer;
+    display: block;
+    width: 100%;
+}
+
+.content-project_box {
+    display: inline-block;
+    transition: all 100ms ease-in;
+    overflow: hidden;
+    padding: 0px 10px 10px 0;
+    width: 25%;
+
+    &:hover {
+        & .content-project_layer {
+            top: 0;
+        }
+    }
+}
+
+.content-project_wrap {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.content-project_progress {
+    margin: 10px;
+    height: 15px;
+    top: calc(50% - 20px);
+    position: relative;
+}
+
+.content-project_layer {
+    background-color: rgba(55, 58, 71, 0.9);
+    width: 100%;
+    height: 35%;
+    position: absolute;
+    top: -100%;
+    transition: all 100ms ease;
+}
+
+.content-project_remove {
+    position: absolute;
+    top: calc(50% - 13px);
+    right: calc(50% - 13px);
+    font-size: 26px;
+    font-weight: bold;
+    cursor: pointer;
+    color: rgb(217, 84, 79);
+    transition: all 150ms ease-in;
+
+    &:hover {
+        text-shadow: 0px 0 5px;
+    }
+}
+
+.breadCrumb-item {
+    cursor: pointer;
 }
 
 .content-title_logined {
@@ -274,6 +356,21 @@ body {
 
 .my-dialog {
     z-index: 99999;
+
+    .dialog__header {
+        margin: -40px -30px 50px;
+        padding: 10px;
+        font-size: 15px;
+        background-color: #323232;
+        color: white;
+    }
+
+    .dialog__content--add, .dialog__content--common {
+        padding: 40px 30px 20px;
+        .login-btn {
+            margin: 45px 0 0;
+        }
+    }
 }
 
 .upload-box {

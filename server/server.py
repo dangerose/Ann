@@ -5,6 +5,7 @@ import tornado.ioloop
 import tornado.options
 import tornado.web
 import pymysql.cursors
+import time
 
 from tornado.options import options, define
 from urllib import parse
@@ -20,19 +21,26 @@ connect = pymysql.Connect(
     port=3306,
     user='root',
     passwd='Hh7664575',
-    db='zhengming',
+    db='jiafang',
     charset='utf8'
 )
 
-sqlQueryMax = "select max(num) from picjf where menuId = '%s'"
-sqlQueryByMenu = "select * from picjf where menuId = '%s' ORDER BY num"
-sqlQueryByPicId = "select * from picjf where picId = '%s'"
-sqlInsert = "INSERT INTO picjf (picId, name, num, path, size, menuId) VALUES ( '%s', '%s', '%d', '%s', '%s', '%s' )"
-sqlDel = "DELETE FROM picjf WHERE picId = '%s'"
-sqlSortDown = "UPDATE picjf SET num = num - 1 WHERE num > %d"
+sqlQueryMax = "select max(num) from picjf_copy where projectId = '%s'"
+sqlQueryByProject = "select * from picjf_copy where projectId = '%s' ORDER BY num"
+sqlQueryByPicId = "select * from picjf_copy where picId = '%s'"
+sqlInsert = "INSERT INTO picjf_copy (picId, name, num, path, size, menuId, projectId) VALUES ( '%s', '%s', '%d', '%s', '%s', '%s', '%s' )"
+sqlDel = "DELETE FROM picjf_copy WHERE picId = '%s'"
+sqlSortDown = "UPDATE picjf_copy SET num = num - 1 WHERE num > %d and projectId = '%s'"
+sqlQueryProject = "select pro.*,pic.path from project as pro left join picjf_copy as pic on (pro.menuId = '%s' and pro.mainPicId = pic.picId) order by num"
+sqlAddProject = "INSERT INTO project (projectId, projectName, menuId, num) VALUES ( '%s', '%s', '%s', '%d' )"
+sqlQueryProjectById = "select * from project where projectId = '%s'"
+sqlDelProject = "DELETE FROM project WHERE projectId = '%s'"
+sqlDelProjectImgs = "DELETE FROM picjf_copy WHERE projectId = '%s'"
+sqlQueryProjectImgs = "select * from picjf_copy WHERE projectId = '%s'"
+sqlSortDownProject = "UPDATE project SET num = num - 1 WHERE (num > %d and menuId = '%s')"
+sqlUpdateMainPicId = "UPDATE project SET mainPicId = '%s' WHERE projectId = '%s'"
 
 # 获取游标
-cursor = connect.cursor()
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -42,6 +50,10 @@ class Application(tornado.web.Application):
             (r"/upload_img", UploadHandler),
             (r"/delete_img", DeleteHandler),
             (r"/get_img_path", GetPathHandler),
+            (r"/get_project", GetProjectHandler),
+            (r"/add_project", AddProjectHandler),
+            (r"/update_main_picid", UpdateMainPicIdHandler),
+            (r"/delete_project", DeleteProjectHandler),
             (r"/resort_img", reSortHandler),
             (r"/static/(.*)", StaticHandler, {'path': os.path.join(os.path.dirname(__file__), "../static")})
         ]
@@ -73,7 +85,8 @@ class LoginHandler(BaseHandler):
 class UploadHandler(BaseHandler):
     def post(self, *args, **kwargs):
         menuId = self.get_argument('menuId', '/')
-        picId = self.get_argument('picId', 'hello')
+        projectId = self.get_argument('projectId', None)
+        picId = self.get_argument('picId', '')
         file_imgs = self.request.files['img']
         menu_path = '../static/img/{0}'.format(menuId)
         save_to = '../static/img/{0}/{1}'.format(menuId, picId)
@@ -84,6 +97,7 @@ class UploadHandler(BaseHandler):
         }
         print(menu_path)
         print(save_to)
+        cursor = connect.cursor()
         try:
             if not os.path.exists(menu_path):
                 os.makedirs(menu_path)
@@ -108,14 +122,14 @@ class UploadHandler(BaseHandler):
                 mini_img.save(min_img)
 
                 # 查询最大排序
-                cursor.execute(sqlQueryMax % (menuId))
+                cursor.execute(sqlQueryMax % (projectId))
                 results = cursor.fetchall()
                 max_num = 0
                 for row in results:
                     if row[0] is not None:
                         max_num = row[0] + 1
                 # 插入表中
-                data = (picId, picId, max_num, save_to, new_size, menuId)
+                data = (picId, picId, max_num, save_to, new_size, menuId, projectId)
                 cursor.execute(sqlInsert % data)
                 connect.commit()
                 print('成功插入', cursor.rowcount, '条数据')
@@ -127,6 +141,7 @@ class UploadHandler(BaseHandler):
             print(e)
 
         finally:
+            cursor.close()
             self.finish(return_status)
                     
 
@@ -135,6 +150,7 @@ class DeleteHandler(BaseHandler):
     def get(self, *args, **kwargs):
         menuId = self.get_argument('menuId', None)
         miniPicId = self.get_argument('picId', None)
+        projectId = self.get_argument('projectId', None)
         miniChar = 'mini_'
         picId = miniPicId.replace(miniChar, '')
         file_path = '../static/img/{0}/{1}'.format(menuId, miniPicId)
@@ -145,6 +161,7 @@ class DeleteHandler(BaseHandler):
             "msg": None
         }
 
+        cursor = connect.cursor()
         try:
             # 查出序号
             cursor.execute(sqlQueryByPicId % picId)
@@ -154,7 +171,7 @@ class DeleteHandler(BaseHandler):
             cursor.execute(sqlDel % picId)
             connect.commit()
             # 更新其它排序
-            cursor.execute(sqlSortDown % picNum)
+            cursor.execute(sqlSortDown % (picNum, projectId))
             connect.commit()
             # 删除文件
             if os.path.exists(file_path):
@@ -176,12 +193,14 @@ class DeleteHandler(BaseHandler):
             print(str(e))
 
         finally:
+            cursor.close()
             self.finish(return_status)
         
 
 class GetPathHandler(BaseHandler):
     def get(self, *args, **kwargs):
         menuId = self.get_argument('menuId', None)
+        projectId = self.get_argument('projectId', None)
         menu_path = '../static/img/{0}/'.format(menuId)
 
         return_data = {
@@ -195,8 +214,9 @@ class GetPathHandler(BaseHandler):
             return_data['msg']='{0} not exists.'.format(menu_path)
             self.finish(return_data)
             return
+        cursor = connect.cursor()
         try:
-            cursor.execute(sqlQueryByMenu % (menuId))
+            cursor.execute(sqlQueryByProject % (projectId))
             table = cursor.fetchall()
             for row in table:
                 if row[0] is not None:
@@ -212,16 +232,165 @@ class GetPathHandler(BaseHandler):
                         data['picId'] = picId
                         data['num'] = row[2]
                         data['size'] = '{0}*{1}'.format(max_size,min_size)
-                        return_data['status'] = 'ok'
-                        return_data['msg'] = 'success'
                         return_data['data'].append(data)
+            return_data['status'] = 'ok'
+            return_data['msg'] = 'success'
 
         except Exception as e:
             return_data['status']='fail'
             return_data['msg']=str(e)
             
         finally:
+            cursor.close()
             self.finish(return_data)
+
+
+class GetProjectHandler(BaseHandler):
+    def get(self, *args, **kwargs):
+        menuId = self.get_argument('menuId', None)
+
+        return_data = {
+            "status": None,
+            "msg": None,
+            "data": []
+        }
+
+        cursor = connect.cursor()
+        try:
+            # 查询哪些项目
+            cursor.execute(sqlQueryProject % (menuId))
+            table = cursor.fetchall()
+            for row in table:
+                if row[0] is not None:
+                    data = {}
+                    data['projectId'] = row[0]
+                    data['projectName'] = row[1]
+                    data['mainPicId'] = row[2]
+                    data['num'] = row[4]
+                    data['mainPicPath'] = row[5]
+                    return_data['data'].append(data)
+            return_data['status'] = 'ok'
+            return_data['msg'] = 'success'
+
+        except Exception as e:
+            return_data['status'] = 'fail'
+            return_data['msg'] = str(e)
+
+        finally:
+            cursor.close()
+            self.finish(return_data)
+
+class AddProjectHandler(BaseHandler):
+    def get(self, *args, **kwargs):
+        projectName = self.get_argument('projectName', None)
+        menuId = self.get_argument('menuId', None)
+
+        return_data = {
+            "status": None,
+            "msg": None,
+            "data": []
+        }
+
+        cursor = connect.cursor()
+        try:
+            t = time.time()
+            # 查询总行数
+            cursor.execute(sqlQueryProject % (menuId))
+            connect.commit()
+            total_num_in_menu = cursor.rowcount
+            projectId = menuId + '_project' + str(int(round(t * 1000000))) # 微秒
+            cursor.execute(sqlAddProject % (projectId, projectName, menuId, total_num_in_menu))
+            connect.commit()
+            return_data['status'] = 'ok'
+            return_data['msg'] = '新增项目成功'
+
+        except Exception as e:
+            return_data['status'] = 'fail'
+            return_data['msg'] = str(e)
+
+        finally:
+            cursor.close()
+            self.finish(return_data)
+
+class UpdateMainPicIdHandler(BaseHandler):
+    def get(self, *args, **kwargs):
+        projectId = self.get_argument('projectId', None)
+        picId = self.get_argument('picId', None)
+
+        return_data = {
+            "status": None,
+            "msg": None,
+            "data": []
+        }
+
+        cursor = connect.cursor()
+        try:
+            cursor.execute(sqlUpdateMainPicId % (picId, projectId))
+            connect.commit()
+            return_data['status'] = 'ok'
+            return_data['msg'] = '更新成功'
+
+        except Exception as e:
+            return_data['status'] = 'fail'
+            return_data['msg'] = str(e)
+
+        finally:
+            cursor.close()
+            self.finish(return_data)
+
+
+class DeleteProjectHandler(BaseHandler):
+    def get(self, *args, **kwargs):
+        projectId = self.get_argument('projectId', None)
+        menuId = self.get_argument('menuId', None)
+
+        return_status = {
+            "status": None,
+            "msg": None
+        }
+
+        cursor = connect.cursor()
+        try:
+            # 查出序号
+            cursor.execute(sqlQueryProjectById % projectId)
+            proInfo = cursor.fetchone()
+            proNum = proInfo[4]
+            # 删除项目数据库行
+            cursor.execute(sqlDelProject % projectId)
+            connect.commit()
+            # 更新其它排序
+            cursor.execute(sqlSortDownProject % (proNum, projectId))
+            connect.commit()
+            # 查询项目下的图片
+            cursor.execute(sqlQueryProjectImgs % projectId)
+            pic_list = cursor.fetchall()
+            for row in pic_list:
+                if row[0] is not None:
+                    file_path = row[3]
+                    file_name = row[1]
+                    mini_file_path = file_path.replace(file_name, 'mini_' + file_name)
+                    # 删除文件
+                    if os.path.exists(file_path):
+                        img = Image.open(file_path)
+                        os.remove(file_path)
+                        if os.path.exists(mini_file_path):
+                            os.remove(mini_file_path)
+            # 删除图片的数据库数据
+            cursor.execute(sqlDelProjectImgs % projectId)
+            connect.commit()
+
+            return_status["status"] = "ok"
+            return_status["msg"] = "success"
+
+        except Exception as e:
+            return_status["status"] = "fail"
+            return_status["msg"] = str(e)
+            print(str(e))
+
+        finally:
+            cursor.close()
+            self.finish(return_status)
+
 
 class reSortHandler(BaseHandler):
     def post(self, *args, **kwargs):
@@ -236,7 +405,8 @@ class reSortHandler(BaseHandler):
             "msg": None
         }
 
-        sql = 'UPDATE picjf SET num = CASE picId'
+        sql = 'UPDATE picjf_copy SET num = CASE picId'
+        cursor = connect.cursor()
         try:
             pic_id_list = []
             for pic in pic_data:
@@ -254,6 +424,7 @@ class reSortHandler(BaseHandler):
             print(e)
 
         finally:
+            cursor.close()
             self.finish(return_status)
 
 

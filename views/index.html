@@ -9,7 +9,7 @@
 
     <link rel="stylesheet" href="../static/components/bootstrap-3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/components/DialogEffects/css/dialog.css">
-    <link rel="stylesheet" href="../static/components/DialogEffects/css/dialog-cathy.css">
+    <link rel="stylesheet" type="text/css" href="../static/components/DialogEffects/css/dialog-sandra.css" />
     <link rel="stylesheet" href="../static/components/file-upload/jquery.fileupload.css">
     <!-- <link rel="stylesheet" href="../static/components/bootstrap-fileinput/css/fileinput.min.css"> -->
     <link rel="stylesheet" href="../static/components/swiper/swiper.css">
@@ -81,6 +81,7 @@
     </div>
     <div class="content">
         <div id="contentTitle" class="content-title d-n">
+            <ol class="breadcrumb" id="breadCrumb"></ol>
             <button id="btnShow" class="content-title_login blue" href="javascript:;" data-dialog="somedialog"
                 class="trigger">登
                 录</button>
@@ -121,6 +122,31 @@
                         aria-describedby="basic-addon1">
                 </div>
                 <button id="btnLogin" type="button" class="btn btn-default btn-block login-btn black">登录</button>
+            </div>
+        </div>
+        <!-- 模态框（Modal-新增项目窗口） -->
+        <div id="addProDialog" class="dialog my-dialog">
+            <div class="dialog__overlay"></div>
+            <div class="dialog__content dialog__content--add">
+                <div class="dialog__header">新增项目</div>
+                <div style="display: none;"><button id="btnClose" class="action" data-dialog-close>Close</button></div>
+                <div class="input-group">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="button">项目名称</button>
+                    </span>
+                    <input name="projectName" type="text" class="form-control" placeholder="请输入...">
+                </div>
+                <button id="btnAddPro" type="button" class="btn btn-default btn-block login-btn black">新增</button>
+            </div>
+        </div>
+        <!-- 模态框（Modal-新增项目窗口） -->
+        <div id="commonDialog" class="dialog my-dialog">
+            <div class="dialog__overlay"></div>
+            <div class="dialog__content dialog__content--common">
+                <div class="dialog__header">温馨提示</div>
+                <div id="commonDialogText" class="input-group">
+                </div>
+                <button id="btnCommon" type="button" class="btn btn-default btn-block login-btn black">确定</button>
             </div>
         </div>
     </div>
