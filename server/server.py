@@ -15,23 +15,13 @@ define("port", default=8081, help="running on given port", type=int)
 define("username", default="admin", help="user name", type=str)
 define("passwd", default="ann123456", help="password", type=str)
 
-# 连接数据库
-connect = pymysql.Connect(
-    host='101.132.227.116',
-    port=3306,
-    user='root',
-    passwd='Hh7664575',
-    db='jiafang',
-    charset='utf8'
-)
-
 sqlQueryMax = "select max(num) from picjf_copy where projectId = '%s'"
 sqlQueryByProject = "select * from picjf_copy where projectId = '%s' ORDER BY num"
 sqlQueryByPicId = "select * from picjf_copy where picId = '%s'"
 sqlInsert = "INSERT INTO picjf_copy (picId, name, num, path, size, menuId, projectId) VALUES ( '%s', '%s', '%d', '%s', '%s', '%s', '%s' )"
 sqlDel = "DELETE FROM picjf_copy WHERE picId = '%s'"
 sqlSortDown = "UPDATE picjf_copy SET num = num - 1 WHERE num > %d and projectId = '%s'"
-sqlQueryProject = "select pro.*,pic.path from project as pro left join picjf_copy as pic on (pro.menuId = '%s' and pro.mainPicId = pic.picId) order by num"
+sqlQueryProject = "select pro.*,pic.path from project as pro left join picjf_copy as pic on (pro.mainPicId = pic.picId) where pro.menuId = '%s' order by num"
 sqlAddProject = "INSERT INTO project (projectId, projectName, menuId, num) VALUES ( '%s', '%s', '%s', '%d' )"
 sqlQueryProjectById = "select * from project where projectId = '%s'"
 sqlDelProject = "DELETE FROM project WHERE projectId = '%s'"
@@ -41,6 +31,15 @@ sqlSortDownProject = "UPDATE project SET num = num - 1 WHERE (num > %d and menuI
 sqlUpdateMainPicId = "UPDATE project SET mainPicId = '%s' WHERE projectId = '%s'"
 
 # 获取游标
+
+sql_config = {
+    'host': '101.132.227.116',
+    'port': 3306,
+    'user': 'root',
+    'passwd': 'Hh7664575',
+    'db': 'jiafang',
+    'charset': 'utf8'
+}
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -84,6 +83,8 @@ class LoginHandler(BaseHandler):
 
 class UploadHandler(BaseHandler):
     def post(self, *args, **kwargs):
+        # 连接数据库
+        connect = pymysql.Connect(**sql_config)
         menuId = self.get_argument('menuId', '/')
         projectId = self.get_argument('projectId', None)
         picId = self.get_argument('picId', '')
@@ -142,12 +143,15 @@ class UploadHandler(BaseHandler):
 
         finally:
             cursor.close()
+            connect.close()
             self.finish(return_status)
                     
 
 
 class DeleteHandler(BaseHandler):
     def get(self, *args, **kwargs):
+        # 连接数据库
+        connect = pymysql.Connect(**sql_config)
         menuId = self.get_argument('menuId', None)
         miniPicId = self.get_argument('picId', None)
         projectId = self.get_argument('projectId', None)
@@ -194,11 +198,13 @@ class DeleteHandler(BaseHandler):
 
         finally:
             cursor.close()
+            connect.close()
             self.finish(return_status)
         
 
 class GetPathHandler(BaseHandler):
     def get(self, *args, **kwargs):
+        connect = pymysql.Connect(**sql_config)
         menuId = self.get_argument('menuId', None)
         projectId = self.get_argument('projectId', None)
         menu_path = '../static/img/{0}/'.format(menuId)
@@ -231,6 +237,7 @@ class GetPathHandler(BaseHandler):
                         size = "{0}*{1}".format(str(max_size), str(min_size))
                         data['picId'] = picId
                         data['num'] = row[2]
+                        data['path'] = row[3]
                         data['size'] = '{0}*{1}'.format(max_size,min_size)
                         return_data['data'].append(data)
             return_data['status'] = 'ok'
@@ -242,11 +249,13 @@ class GetPathHandler(BaseHandler):
             
         finally:
             cursor.close()
+            connect.close()
             self.finish(return_data)
 
 
 class GetProjectHandler(BaseHandler):
     def get(self, *args, **kwargs):
+        connect = pymysql.Connect(**sql_config)
         menuId = self.get_argument('menuId', None)
 
         return_data = {
@@ -278,10 +287,12 @@ class GetProjectHandler(BaseHandler):
 
         finally:
             cursor.close()
+            connect.close()
             self.finish(return_data)
 
 class AddProjectHandler(BaseHandler):
     def get(self, *args, **kwargs):
+        connect = pymysql.Connect(**sql_config)
         projectName = self.get_argument('projectName', None)
         menuId = self.get_argument('menuId', None)
 
@@ -310,10 +321,12 @@ class AddProjectHandler(BaseHandler):
 
         finally:
             cursor.close()
+            connect.close()
             self.finish(return_data)
 
 class UpdateMainPicIdHandler(BaseHandler):
     def get(self, *args, **kwargs):
+        connect = pymysql.Connect(**sql_config)
         projectId = self.get_argument('projectId', None)
         picId = self.get_argument('picId', None)
 
@@ -336,11 +349,13 @@ class UpdateMainPicIdHandler(BaseHandler):
 
         finally:
             cursor.close()
+            connect.close()
             self.finish(return_data)
 
 
 class DeleteProjectHandler(BaseHandler):
     def get(self, *args, **kwargs):
+        connect = pymysql.Connect(**sql_config)
         projectId = self.get_argument('projectId', None)
         menuId = self.get_argument('menuId', None)
 
@@ -389,11 +404,13 @@ class DeleteProjectHandler(BaseHandler):
 
         finally:
             cursor.close()
+            connect.close()
             self.finish(return_status)
 
 
 class reSortHandler(BaseHandler):
     def post(self, *args, **kwargs):
+        connect = pymysql.Connect(**sql_config)
         body = self.request.body
         args = dict([x.split('=') for x in body.decode().split('&')])
         pic_data = args.get('picData')
@@ -425,6 +442,7 @@ class reSortHandler(BaseHandler):
 
         finally:
             cursor.close()
+            connect.close()
             self.finish(return_status)
 
 

@@ -45,7 +45,7 @@
         }
     };
 
-    var menuPicData = []
+    var _menuPicData = []
 
     // 面包屑导航
     var breadCrumb = {
@@ -55,16 +55,25 @@
             this.$ele.html('')
         },
         update: function(arr) {
-            this.clear()
-            var html = ''
+            var that = this
             this.level = arr.length
-            arr.forEach((item, i) => {
-                if (i < arr.length - 1)
-                    html += `<li class="breadCrumb-item"><a>${item}</a></li>`
-                else
-                    html += `<li class="active">${item}</li>`
-            })
-            this.$ele.html(html)
+            if (this.level >= 2) {
+                this.clear()
+                var html = ''
+                arr.forEach((item, i) => {
+                    if (i < arr.length - 1)
+                        html += `<li class="breadCrumb-item"><a>${item}</a></li>`
+                    else
+                        html += `<li class="active">${item}</li>`
+                })
+                this.$ele.html(html)
+            }
+            if (this.level < 2) {
+                that.$ele.addClass('o-0')
+            }
+            else {
+                that.$ele.removeClass('o-0')
+            }
         }
     }
 
@@ -79,24 +88,33 @@
                     projectData.forEach(function (ele) {
                         var html = '';
                         if (ele.mainPicPath) {
-                            html = '<div class="content-project_box">\
+                            html = `<div class="content-project_box">\
                                         <div class="content-project_wrap">\
-                                            <img data-projectId="'+ ele.projectId + '" data-mainPicId="'+ ele.mainPicId + '" data-projectName="'+ ele.projectName +'" class="content-project" src="' + ele.mainPicPath + '" alt="">\
-                                            <div class="content-project_layer"><span class="glyphicon glyphicon-remove content-project_remove"></span></div>\
-                                            <p>'+ ele.projectName +'</p>\
+                                            <img data-projectId="${ele.projectId}" data-mainPicId="${ele.mainPicId}" \
+                                            data-projectName="${ele.projectName}" \
+                                            data-mainPicPath="${ele.mainPicPath}" \
+                                            class="content-project" src="${ele.mainPicPath}" alt="">\
+                                            <div class="content-project_layer ${_isAdmin && Storage.get('hasLogin') ? '' : 'content-project_layer--text'}">\
+                                            ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span>' : `<p>${ele.projectName}</p>`}\
+                                            </div>\
                                         </div>\
-                                    </div>'
+                                    </div>`
                         }
                         else {
-                            html = '<div class="content-project_box">\
+                            html = `<div class="content-project_box">\
                                         <div class="content-project_wrap">\
-                                            <span class="glyphicon glyphicon-picture content-project" aria-hidden="true" style="font-size: 112px;" data-projectId="'+ ele.projectId + '" data-mainPicId="'+ ele.mainPicId + '" data-projectName="'+ ele.projectName +'"></span>\
-                                            <div class="content-project_layer"><span class="glyphicon glyphicon-remove content-project_remove"></span></div>\
-                                            <p>'+ ele.projectName +'</p>\
+                                            <span class="glyphicon glyphicon-picture content-project" aria-hidden="true" style="font-size: 112px;padding: 28px 0 0;" data-projectId="${ele.projectId}" \
+                                            data-mainPicId="${ele.mainPicId}" \
+                                            data-mainPicPath="${ele.mainPicPath}"\
+                                            data-projectName="${ele.projectName}"></span>\
+                                            <div class="content-project_layer ${_isAdmin && Storage.get('hasLogin') ? '' : 'content-project_layer--text'}">\
+                                            ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span>' : `<p>${ele.projectName}</p>`}\
+                                            </div>\
                                         </div>\
-                                    </div>'
+                                    </div>`
                         }
                         $uploadBox.before(html);
+                        view.toViewOrEdit();
                     });
                 }
             });
@@ -114,18 +132,23 @@
     }
 
     var projectImg = {
-        get: function(projectId) {
+        get: function(projectId, notCreateHtml, success) {
             var $uploadBox = $('#uploadBox')
             $.get("/get_img_path?menuId="+ _curMenuId +"&projectId=" + projectId + '&time=' + new Date().getTime(), function (data) {
                 if (data.status === 'ok') {
                     // 加载图片
-                    menuPicData = data.data
+                    _menuPicData = data.data
+                    if (notCreateHtml) {
+                        success && success()
+                        return
+                    }
                     data.data.forEach(function (ele) {
                         var html = '<div class="content-img_box">\
                                         <div class="content-img_wrap">\
                                             <img data-picId="mini_'+ ele.picId + '" class="content-img" src="../static/img/' + _curMenuId + '/mini_' + ele.picId + '" alt="">\
                                             <div class="content-img_layer">\
                                                 <span class="glyphicon glyphicon-remove content-img_remove"></span>\
+                                                <span class="content-img_split"></span>\
                                                 <span class="glyphicon glyphicon-ok content-img_setMain"></span>\
                                             </div>\
                                         </div>\
@@ -135,7 +158,9 @@
                             $html.find('.content-img').addClass('main-img');
                         }
                         $uploadBox.before($html);
+                        view.toViewOrEdit();
                     });
+                    success && success()
                 }
             });
         }
@@ -157,26 +182,26 @@
     }
 
     function removePicData (picId) {
-        for (var index = 0; index < menuPicData.length; index++) {
-            var element = menuPicData[index];
+        for (var index = 0; index < _menuPicData.length; index++) {
+            var element = _menuPicData[index];
             if (element.picId === picId) {
-                menuPicData.splice(index, 1)
+                _menuPicData.splice(index, 1)
                 break;
             }
         }
-        menuPicData.forEach(function (item, i) {
+        _menuPicData.forEach(function (item, i) {
             item.num = i
         })
-        console.log('remove ', menuPicData)
+        console.log('remove ', _menuPicData)
     }
 
     function addPicData (picId) {
-        menuPicData.push({
+        _menuPicData.push({
             picId: picId,
             size: '',
-            num: menuPicData.length === 0 ? 0 : (menuPicData[menuPicData.length - 1].num + 1)
+            num: _menuPicData.length === 0 ? 0 : (_menuPicData[_menuPicData.length - 1].num + 1)
         })
-        console.log('add ',menuPicData)
+        console.log('add ',_menuPicData)
     }
 
     function sortPicAfterDrag () {
@@ -185,8 +210,8 @@
         $pics.each(function (i) {
             var $pic = $(this)
             let picId = $pic.find('.content-img').attr('data-picId').replace('mini_', '')
-            for (var index = 0; index < menuPicData.length; index++) {
-                var element = menuPicData[index];
+            for (var index = 0; index < _menuPicData.length; index++) {
+                var element = _menuPicData[index];
                 if (element.picId === picId) {
                     element.num = i
                     newArr.push(element)
@@ -194,14 +219,14 @@
                 }
             }
         })
-        menuPicData = newArr
-        console.log('drag ',menuPicData)
+        _menuPicData = newArr
+        console.log('drag ',_menuPicData)
         $.ajax({
             type: 'post',
             url:'/resort_img',
             contentType:'application/json',
             data:{
-               picData: JSON.stringify(menuPicData)
+               picData: JSON.stringify(_menuPicData)
             },
             dataType:'json',
             success:function (data) {
@@ -282,22 +307,36 @@
 
         // project点击事件
         var $contentImgs = $('#contentImgs');
-        $contentImgs.delegate('.content-project', 'click', function () {
-            var $img = $(this);
+        $contentImgs.delegate('.content-project_box', 'click', function () {
+            var $box = $(this)
+            var $img = $box.find('.content-project');
             var projectId = $img.attr('data-projectId')
             var mainPicId = $img.attr('data-mainPicId')
             var projectName = $img.attr('data-projectName')
+            var mainPicPath = $img.attr('data-mainPicPath')
             breadCrumb.update([_curMenuName, projectName])
             _curProjectId = projectId
             _mainPicIdInCurProject = mainPicId
-            view.switchContView(projectId)
+            if (_isAdmin) {
+                view.switchContView(projectId)
+            }
+            else {
+                projectImg.get(projectId, true, function() {
+                    if (!mainPicPath && _menuPicData.length === 0) {
+                        showCommonDialog('项目还未添加图片')
+                        return
+                    }
+                    mainPicPath = _menuPicData[0].path // 默认主图是第一张
+                    $picZoom.show(mainPicPath, _menuPicData)
+                })
+            }
         });
 
         // 图片点击事件
         var $contentImgs = $('#contentImgs');
         $contentImgs.delegate('img.content-img', 'click', function () {
-            var $img = $(this);
-            $picZoom.show($img.attr('src').replace('mini_', ''), menuPicData);
+            /* var $img = $(this);
+            $picZoom.show($img.attr('src').replace('mini_', ''), _menuPicData); */
         });
 
         // 图片删除事件
@@ -342,7 +381,12 @@
         var dlgtrigger = document.querySelector('[data-dialog=somedialog]'),
             somedialog = document.getElementById('somedialog'),
             dlg = new DialogFx(somedialog);
-        dlgtrigger.addEventListener('click', dlg.toggle.bind(dlg));
+        var dlgFun = dlg.toggle.bind(dlg)
+        dlgtrigger.addEventListener('click', function () {
+            var $username = $('[name=username]')
+            $username.focus()
+            dlgFun()
+        });
 
         // 添加项目窗口 事件
         var addProDialog = document.getElementById('addProDialog'),
@@ -438,7 +482,7 @@
                     $uploadBox.removeClass('d-n');
                     // 显示图片删除按钮
                     $imgDelLayer.removeClass('d-n');
-                    window.drags('content-img_box', 'div-dash', 'dash', sortPicAfterDrag);
+                    /* window.drags('content-img_box', 'div-dash', 'dash', sortPicAfterDrag); */
                 }
                 else {
                     // 隐藏上传按钮
@@ -551,6 +595,8 @@
         // 事件
         $uploadBox.off('click').click(function () {
             if (breadCrumb.level === 1) {
+                var $projectName = $('[name=projectName]')
+                $projectName.focus()
                 _showAddProDialog()
             }
             else {
@@ -595,7 +641,9 @@
                             $html.find('img').on('load', function () {
                                 $(this).removeAttr('height').removeAttr('width');
                                 $html.find('.content-img_layer').removeClass('t-0');
-                                $html.find('.content-img_layer').html('<span class="glyphicon glyphicon-remove content-img_remove"></span><span class="glyphicon glyphicon-ok content-img_setMain"></span>');
+                                $html.find('.content-img_layer').html('<span class="glyphicon glyphicon-remove content-img_remove"></span>\
+                                <span class="content-img_split"></span>\
+                                <span class="glyphicon glyphicon-ok content-img_setMain"></span>');
                             });
                             $('#uploadBox').before($html);
                         }

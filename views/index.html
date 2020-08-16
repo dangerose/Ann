@@ -18,74 +18,16 @@
 </head>
 
 <body>
-    <div class="menu">
-        <div class="menu-title">
-            <a href="javascript:;">
-                <!-- <img class="menu-title_logo" src="../static/img/logo.png" alt="主页LOGO"> -->
-                <strong class="menu-title_name">贾方</strong> <i class="menu-title_class">Architectural photography</i>
-            </a>
+    <div class="header">
+        <div class="header-logo">
+            <img src="../static/img/JFlogo.jpg" alt="">
         </div>
-        <div id="menu" class="menu-cont">
-            <a href="javascript:;">
-            </a>
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu01">
-                    <a href="javascript:;">
-                        <!-- 建筑 -->
-                        <p>Architecture</p>
-                    </a>
-                </li>
-            </ul>
-
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu02">
-                    <a href="javascript:;">
-                        <!-- 地产 -->
-                        <p>Estate</p>
-                    </a>
-                </li>
-            </ul>
-            
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu03">
-                    <a href="javascript:;">
-                        <!-- 酒店 -->
-                        <p>Hotel</p>
-                    </a>
-                </li>
-            </ul>
-             
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu04">
-                    <a href="javascript:;">
-                        <!-- 餐厅 -->
-                        <p>Restaurant</p>
-                    </a>
-                </li>
-            </ul>
-
-            <ul>
-                <li class="menu-cont_title" data-menuId="menu05">
-                    <a href="javascript:;">
-                        <!-- 景观/照明 -->
-                        <p>Landscape/Lighting</p>
-                    </a>
-                </li>
-            </ul>
-
-            <div class="menu-bottom">
-                <p><img class="menu-bottom_icon menu-bottom_phone" src="../static/img/phone.png"/> 18013947966</p>
-                <p><img class="menu-bottom_icon menu-bottom_email" src="../static/img/email.png"/> jf-photo@qq.com</p>
-            </div>
-        </div>
-    </div>
-    <div class="content">
         <div id="contentTitle" class="content-title d-n">
             <ol class="breadcrumb" id="breadCrumb"></ol>
             <button id="btnShow" class="content-title_login blue" href="javascript:;" data-dialog="somedialog"
                 class="trigger">登
                 录</button>
-            <div id="btnShow_logined" class="btn-group" style="display: none;">
+            <div id="btnShow_logined" class="btn-group btn-logined" style="display: none;">
                 <button type="button" class="btn btn-default dropdown-toggle content-title_logined green"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="glyphicon glyphicon-user" aria-hidden="true"></span> admin <span class="caret"></span>
@@ -95,68 +37,142 @@
                 </ul>
             </div>
         </div>
-        <img src="../static/img/1562076247483.jpg" alt="">
-        <div id="contentImgs">
-            <div id="uploadBox" class="upload-box d-n">
-                <i id="btnUpload" class="glyphicon glyphicon-plus-sign"></i>
-                <!-- The file input field used as target for the file upload widget -->
-                <div class="d-n"><input id="fileupload" type="file" name="img" accept=".jpg" multiple></div>
+    </div>
+    <div class="main">
+        <div class="menu">
+            <div id="menu" class="menu-cont">
+                <a href="javascript:;">
+                </a>
+                <ul>
+                    <li class="menu-cont_title" data-menuId="menu01">
+                        <a href="javascript:;">
+                            <p>Architecture</p>
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="menu-cont_title" data-menuId="menu02">
+                        <a href="javascript:;">
+                            <p>Hotel</p>
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="menu-cont_title" data-menuId="menu03">
+                        <a href="javascript:;">
+                            <p>Real estate</p>
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="menu-cont_title" data-menuId="menu04">
+                        <a href="javascript:;">
+                            <p>Restaurant</p>
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="menu-cont_title" data-menuId="menu05">
+                        <a href="javascript:;">
+                            <p>Business & Office</p>
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="menu-cont_title" data-menuId="menu06">
+                        <a href="javascript:;">
+                            <p>Landscape & Lighting</p>
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="menu-cont_title" data-menuId="menu07">
+                        <a href="javascript:;">
+                            <p>Architecture video</p>
+                        </a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="menu-cont_title" data-menuId="menu08">
+                        <a href="javascript:;">
+                            <p>Personal art</p>
+                        </a>
+                    </li>
+                </ul>
+    
+                <div class="menu-bottom">
+                    <p>Photographer introduction</p>
+                    <p>SINA WEIBO</p>
+                    <p>TEL: 18013947966</p>
+                    <p>2589705008@qq.com</p>
+                </div>
             </div>
         </div>
-        <!-- 模态框（Modal） -->
-        <div id="somedialog" class="dialog my-dialog">
-            <div class="dialog__overlay"></div>
-            <div class="dialog__content">
-                <div class="login_logobox"><span class="glyphicon glyphicon-picture login_logo"></span></div>
-                <div style="display: none;"><button id="btnClose" class="action" data-dialog-close>Close</button></div>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user"
-                            aria-hidden="true"></span></span>
-                    <input name="username" type="text" class="form-control" placeholder="用户名"
-                        aria-describedby="basic-addon1">
+
+        <div class="content">
+            <div id="contentImgs">
+                <div id="uploadBox" class="upload-box d-n">
+                    <i id="btnUpload" class="glyphicon glyphicon-plus-sign"></i>
+                    <div class="d-n"><input id="fileupload" type="file" name="img" accept=".jpg" multiple></div>
                 </div>
-                <div class="input-group">
-                    <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-lock"
-                            aria-hidden="true"></span></span>
-                    <input name="password" type="password" class="form-control" placeholder="密码"
-                        aria-describedby="basic-addon1">
-                </div>
-                <button id="btnLogin" type="button" class="btn btn-default btn-block login-btn black">登录</button>
             </div>
-        </div>
-        <!-- 模态框（Modal-新增项目窗口） -->
-        <div id="addProDialog" class="dialog my-dialog">
-            <div class="dialog__overlay"></div>
-            <div class="dialog__content dialog__content--add">
-                <div class="dialog__header">新增项目</div>
-                <div style="display: none;"><button id="btnClose" class="action" data-dialog-close>Close</button></div>
-                <div class="input-group">
-                    <span class="input-group-btn">
-                      <button class="btn btn-default" type="button">项目名称</button>
-                    </span>
-                    <input name="projectName" type="text" class="form-control" placeholder="请输入...">
-                </div>
-                <button id="btnAddPro" type="button" class="btn btn-default btn-block login-btn black">新增</button>
+        </div> 
+    </div>
+    <!-- 模态框（Modal） -->
+    <div id="somedialog" class="dialog my-dialog">
+        <div class="dialog__overlay"></div>
+        <div class="dialog__content">
+            <div class="login_logobox"><span class="glyphicon glyphicon-picture login_logo"></span></div>
+            <div style="display: none;"><button id="btnClose" class="action" data-dialog-close>Close</button></div>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user"
+                        aria-hidden="true"></span></span>
+                <input name="username" type="text" class="form-control" placeholder="用户名"
+                    aria-describedby="basic-addon1">
             </div>
-        </div>
-        <!-- 模态框（Modal-新增项目窗口） -->
-        <div id="commonDialog" class="dialog my-dialog">
-            <div class="dialog__overlay"></div>
-            <div class="dialog__content dialog__content--common">
-                <div class="dialog__header">温馨提示</div>
-                <div id="commonDialogText" class="input-group">
-                </div>
-                <button id="btnCommon" type="button" class="btn btn-default btn-block login-btn black">确定</button>
+            <div class="input-group">
+                <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-lock"
+                        aria-hidden="true"></span></span>
+                <input name="password" type="password" class="form-control" placeholder="密码"
+                    aria-describedby="basic-addon1">
             </div>
+            <button id="btnLogin" type="button" class="btn btn-default btn-block login-btn black">登录</button>
         </div>
     </div>
-    
+    <!-- 模态框（Modal-新增项目窗口） -->
+    <div id="addProDialog" class="dialog my-dialog">
+        <div class="dialog__overlay"></div>
+        <div class="dialog__content dialog__content--add">
+            <div class="dialog__header">新增项目</div>
+            <div style="display: none;"><button id="btnClose" class="action" data-dialog-close>Close</button></div>
+            <div class="input-group">
+                <span class="input-group-btn">
+                  <button class="btn btn-default" type="button">项目名称</button>
+                </span>
+                <input name="projectName" type="text" class="form-control" placeholder="请输入...">
+            </div>
+            <button id="btnAddPro" type="button" class="btn btn-default btn-block login-btn black">新增</button>
+        </div>
+    </div>
+    <!-- 模态框（Modal-新增项目窗口） -->
+    <div id="commonDialog" class="dialog my-dialog">
+        <div class="dialog__overlay"></div>
+        <div class="dialog__content dialog__content--common">
+            <div class="dialog__header">温馨提示</div>
+            <div id="commonDialogText" class="input-group">
+            </div>
+            <button id="btnCommon" type="button" class="btn btn-default btn-block login-btn black">确定</button>
+        </div>
+    </div>
     <!-- modal -->
     <div class="zoom d-n" id="zoom">
         <div class="zoom-overlay"></div>
         <div class="zoom-content" id="zoomContent">
+            <div class="zoom-num"><span id="zoomNum">1</span>&nbsp;/&nbsp;<span id="zoomTotalNum"></span></div>
             <img class="zoom-pic d-n" src="" id="zoomMainPic"/>
-            <div class="zoom-mini-pic-list d-n" id="zoomMiniPicList">
+            <div class="zoom-mini-pic-list-box" id="zoomMiniPicListBox">
+                <div class="zoom-mini-pic-list" id="zoomMiniPicList">
+                </div>
             </div>
         </div>
         <div class="zoom-load" id="zoomLoad">
@@ -165,6 +181,7 @@
     </div>
 </body>
 <script src="../static/components/jquery.min.js"></script>
+<script src="../static/components/jquery.mousewheel.js"></script>
 <script src="../static/components/swiper/swiper.js"></script>
 <script src="../static/components/bootstrap-3.3.7/js/bootstrap.min.js"></script>
 <!-- <script src="../static/components/bootstrap-fileinput/js/fileinput.min.js"></script>

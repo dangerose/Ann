@@ -104,6 +104,17 @@ a:hover {
     width: unset; */
 }
 
+.zoom-num {
+    height: 5%;
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    position: relative;
+    top: 10px;
+}
+
 .zoom-overlay {
     position: fixed;
     height: 100%;
@@ -111,21 +122,21 @@ a:hover {
     top: 0;
     left: 0;
     opacity: 0.9;
-    background: #fff;
+    background: rgba(0,0,0,.9);
 }
 
 .zoom-pic {
-    max-width: 60%;
-    min-height: 60%;
-    margin: 150px auto;
+    height: 85%;
+    max-width: 95%;
+    margin: 0px auto;
+    padding: 20px 0;
     display: block;
     cursor: pointer;
 }
 
 .zoom-pic--mini {
-    height: 50%;
-    min-height: unset;
-    margin: 100px auto 80px;
+    /* height: 50%;
+    min-height: unset; */
 }
 
 .zoom-loadicon {
@@ -138,24 +149,58 @@ a:hover {
     left: calc(50% - 10px);
 }
 
-.zoom-mini-pic-list {
-    text-align: center;
+.zoom-mini-pic-list-box {
     width: 80%;
+    height: 10%;
+    padding: 0 0 20px;
     margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.zoom-mini-pic-list {
+    height: 100%;
+    display: inline-block;
+    transform: translateX(0px);
+    transition: all .5s ease-out;
 }
 
 
 .zoom-mini-pic-item {
-    width: 10%;
-    padding: 20px 10px 0 0;
-
+    display: inline-block;
     img {
         width: 100%;
         cursor: pointer;
+    }
+}
+
+.zoom-mini-pic-div {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+    height: 50px;
+    margin: 0 5px;
+    vertical-align: top;
+    -moz-background-size: cover;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+
+    &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,.6);
+    }
+
+    &.active {
+        border: 2px solid white;
+        &::after{
+            display: none;
+        }
     }
 }
 
