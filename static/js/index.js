@@ -354,6 +354,14 @@
             view.switchContView(_curMenuId)
         })
 
+        $('#photoIntro').click(function() {
+            $('#intro').removeClass('d-n')
+        })
+
+        $('#intro').click(function () {
+            $('#intro').addClass('d-n')
+        })
+
         // project点击事件
         var $contentImgs = $('#contentImgs');
         $contentImgs.delegate('.content-project_box', 'click', function (e) {

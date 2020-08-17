@@ -18,6 +18,14 @@ body, html {
     padding: 10px 0 0 6px;
 }
 
+.photo-intro {
+    cursor: pointer;
+    &:hover {
+        text-decoration: none;
+        color: #56a7fa;
+    }
+}
+
 .main {
     height: calc(100% - 110px);
     background-color: #e9e7e782;
