@@ -15,18 +15,18 @@ define("port", default=8081, help="running on given port", type=int)
 define("username", default="admin", help="user name", type=str)
 define("passwd", default="ann123456", help="password", type=str)
 
-sqlQueryMax = "select max(num) from picjf_copy where projectId = '%s'"
-sqlQueryByProject = "select * from picjf_copy where projectId = '%s' ORDER BY num"
-sqlQueryByPicId = "select * from picjf_copy where picId = '%s'"
-sqlInsert = "INSERT INTO picjf_copy (picId, name, num, path, size, menuId, projectId) VALUES ( '%s', '%s', '%d', '%s', '%s', '%s', '%s' )"
-sqlDel = "DELETE FROM picjf_copy WHERE picId = '%s'"
-sqlSortDown = "UPDATE picjf_copy SET num = num - 1 WHERE num > %d and projectId = '%s'"
-sqlQueryProject = "select pro.*,pic.path from project as pro left join picjf_copy as pic on (pro.mainPicId = pic.picId) where pro.menuId = '%s' order by num"
+sqlQueryMax = "select max(num) from picjf where projectId = '%s'"
+sqlQueryByProject = "select * from picjf where projectId = '%s' ORDER BY num"
+sqlQueryByPicId = "select * from picjf where picId = '%s'"
+sqlInsert = "INSERT INTO picjf (picId, name, num, path, size, menuId, projectId) VALUES ( '%s', '%s', '%d', '%s', '%s', '%s', '%s' )"
+sqlDel = "DELETE FROM picjf WHERE picId = '%s'"
+sqlSortDown = "UPDATE picjf SET num = num - 1 WHERE num > %d and projectId = '%s'"
+sqlQueryProject = "select pro.*,pic.path from project as pro left join picjf as pic on (pro.mainPicId = pic.picId) where pro.menuId = '%s' order by num"
 sqlAddProject = "INSERT INTO project (projectId, projectName, menuId, num) VALUES ( '%s', '%s', '%s', '%d' )"
 sqlQueryProjectById = "select * from project where projectId = '%s'"
 sqlDelProject = "DELETE FROM project WHERE projectId = '%s'"
-sqlDelProjectImgs = "DELETE FROM picjf_copy WHERE projectId = '%s'"
-sqlQueryProjectImgs = "select * from picjf_copy WHERE projectId = '%s'"
+sqlDelProjectImgs = "DELETE FROM picjf WHERE projectId = '%s'"
+sqlQueryProjectImgs = "select * from picjf WHERE projectId = '%s'"
 sqlSortDownProject = "UPDATE project SET num = num - 1 WHERE (num > %d and menuId = '%s')"
 sqlUpdateMainPicId = "UPDATE project SET mainPicId = '%s' WHERE projectId = '%s'"
 
@@ -423,7 +423,7 @@ class reSortHandler(BaseHandler):
             "msg": None
         }
 
-        sql = 'UPDATE picjf_copy SET num = CASE picId'
+        sql = 'UPDATE picjf SET num = CASE picId'
         cursor = connect.cursor()
         try:
             pic_id_list = []
