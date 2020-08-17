@@ -6,14 +6,16 @@ body, html {
 .header {
     height: 110px;
     display: flex;
-    .header-logo {
-        width: 250px;
-        flex-shrink: 0;
-        padding: 10px 0 0 6px;
-    }
+    background: white;
     img {
         width: 100%;
     }
+}
+
+.header-logo {
+    width: 250px;
+    flex-shrink: 0;
+    padding: 10px 0 0 6px;
 }
 
 .main {
@@ -219,6 +221,8 @@ body, html {
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        transition: all 300ms ease-out;
+
 
         p {
             margin: 0;

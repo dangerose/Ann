@@ -99,12 +99,16 @@
                         </a>
                     </li>
                 </ul>
-    
+
                 <div class="menu-bottom">
                     <p>Photographer introduction</p>
-                    <p>SINA WEIBO</p>
+                    <p><a href="http://www.ikuku.cn/user/jf_photo" target="_blank">IKUKU</a></p>
+                    <p><a href="http://blog.sina.com.cn/u/1937858054" target="_blank">Sina blog</a></p>
+                    <p><a href="https://profile.zjurl.cn/rogue/ugc/profile/?version_code=7.8.1&version_name=70801&user_id=67342845170&media_id=0&request_source=1&active_tab=dongtai&device_id=65&app_name=news_article&tt_from=weixin&utm_source=weixin&utm_medium=toutiao_ios&utm_campaign=client_share&wxshare_count=1"
+                            target="_blank">Headline today</a></p>
+                    <p>jiafang_photo@sina.com</p>
                     <p>TEL: 18013947966</p>
-                    <p>2589705008@qq.com</p>
+                    <p>QQ: 2589705008</p>
                 </div>
             </div>
         </div>
@@ -116,7 +120,7 @@
                     <div class="d-n"><input id="fileupload" type="file" name="img" accept=".jpg" multiple></div>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
     <!-- 模态框（Modal） -->
     <div id="somedialog" class="dialog my-dialog">
@@ -147,7 +151,7 @@
             <div style="display: none;"><button id="btnClose" class="action" data-dialog-close>Close</button></div>
             <div class="input-group">
                 <span class="input-group-btn">
-                  <button class="btn btn-default" type="button">项目名称</button>
+                    <button class="btn btn-default" type="button">项目名称</button>
                 </span>
                 <input name="projectName" type="text" class="form-control" placeholder="请输入...">
             </div>
@@ -164,19 +168,75 @@
             <button id="btnCommon" type="button" class="btn btn-default btn-block login-btn black">确定</button>
         </div>
     </div>
-    <!-- modal -->
+    <!-- 轮播图 -->
     <div class="zoom d-n" id="zoom">
         <div class="zoom-overlay"></div>
         <div class="zoom-content" id="zoomContent">
             <div class="zoom-num"><span id="zoomNum">1</span>&nbsp;/&nbsp;<span id="zoomTotalNum"></span></div>
-            <img class="zoom-pic d-n" src="" id="zoomMainPic"/>
+            <img class="zoom-pic d-n" src="" id="zoomMainPic" />
             <div class="zoom-mini-pic-list-box" id="zoomMiniPicListBox">
                 <div class="zoom-mini-pic-list" id="zoomMiniPicList">
                 </div>
             </div>
         </div>
         <div class="zoom-load" id="zoomLoad">
-            <img class="zoom-loadicon" src="../static/img/loading.gif"/>
+            <img class="zoom-loadicon" src="../static/img/loading.gif" />
+        </div>
+    </div>
+    <!-- 简介 -->
+    <div class="intro">
+        <div class="intro-overlay"></div>
+        <div class="intro-cont">
+            <div class="china">
+                <h1 class="c-head">摄影师简介</h1>
+                <p>贾方</p>
+                <p class="c-indent">
+                    建筑摄影家、影像艺术家，曾就读于南京艺术学院和北京电影学院，拥有摄影艺术方向的学士和硕士学位。现担任南京艺术学院摄影系副教授、系主任；中国文化部《建筑与文化》杂志“建筑与摄影”栏目主持人、《ID+C》杂志摄影特约撰稿人；中国国家艺术基金《剧院建筑》项目主持人；2019平遥国际摄影大展国际教育论坛学术主持人；2019“OPPO全球探索计划”摄影导师；金拴马桩奖、中国摄影“伯奇杯”、1839摄影奖、中国摄影毕业季“优秀作品奖”、鸣凤堂中日青年影像艺术节、PhotoSpeaks中韩摄影展的推委、评委。
+                </p>
+                <p class="c-indent">
+                    贾方建筑摄影工作室创建于2004年，工作室与国内外多家知名设计机构、地产集团保持合作，并协助合作机构多次获得国际重要设计奖项。工作室的主要摄影题材涉及建筑、景观、照明、软装、酒店、地产、商业、办公、餐厅、工厂等。贾方的建筑摄影作品多次刊登在《DOMOS》(意大利)、《商店建筑》（日本）、《中国建筑装饰与装修》、《DI设计新潮》、《ID+C室内设计与装修》、《中国摄影》、《时尚家居》、《现代广告》、《美国室内中文版》、等杂志。曾编著出版了《大师智慧》、《惊艳米兰》、《建筑归来》、《宴遇》系列、《盛世大堂》等图书18部。撰写建筑摄影研究文章20余篇；艺术作品曾在英国、韩国、日本以及中国的平遥国际摄影大展、丽水国际摄影节、济南国际摄影展、北京国际摄影周、中国摄影艺术节、上海美术馆、南京艺术学院美术馆等地展出。
+                </p>
+            </div>
+            <div class="english">
+                <h1 class="e-head">Photographer Profile</h1>
+                <p>Jia Fang</p>
+                <p class="e-indent">
+                    An Architectural Photographer、Image Artist. He achieved Bachelor's Degree in
+                    Photography Art from Nanjing University of the Arts and
+                    Master's Degree in Photography Art from Beijing Film Academy.Now,
+                    he acts as an associate professor and director of Photography
+                    Department in Nanjing University of the Arts；He is also the host of “Architecture and Photography”
+                    column from the magazine 《Architecture and Culture》 which is run by Ministry of Culture of China;
+                    the staff writer of photography of 《ID+C》Magazine; the host of 《Theater Architecture》program of
+                    China  National Arts Fund; the academic host of international education forum at PINGYAO
+                    International Photography Festival in 2019;the photography mentor of “OPPO Global
+                    Exploration Program ”in 2019.He is also the judge of Golden Shuanmazhuang Awards、“BOQI CUP ”of China
+                    Photography、1839
+                    Photography Awards、“Outstanding Works Award” of China Photography in Graduation Season、MEIHUDO
+                    International Youth Visual
+                    Media Festival and Photo Speaks China-South Korea Photography
+                    Exhibition.</p>
+                <p class="e-indent">
+                    Jia Fang Architectural Photography Studio was founded in 2004
+                    which maintained a good partnership with well-known design
+                    agencies and real estate corporations from both domestic and
+                    abroad. In addition, they have helped the partners achieve many
+                    major international design awards. The major photography subjects of Jia Fang Architectural
+                    Photography Studio include：architecture、
+                    landscape、lighting、soft outfit、hotel、real estate、business、office、
+                    restaurant、factory etc. Jia Fang’s architectural photography works
+                    are published in the 《DOMOS》(Italy)、《Shop Design&Interior Design》(Japan)、《China Building
+                    Design&Decoration》、《DI Design Trends 》、《ID+C Interior Design+Construction》、《Chinese
+                    Photography》、《Trends Home》、《Modern Advertisement》and《Interior Design China》for many times. Jia Fang
+                    edited and published 18 books，
+                    Including Designs by Masters、Stunning Milan、Architecture Return、
+                    Restaurant Space series、Grand Lobby etc. He also wrote more than 20 articles about architectural
+                    photography studies. His artistic works were exhibited in Britain、South Korea、Japan and PINGYAO
+                    International Photography Festival、LISHUI International Photography
+                    Festival、JINAN International Photography Festival、PHOTO BEIJING 、China Photography Art
+                    Festival、Shanghai Art Museum and Art
+                    Museum of Nanjing University of the Arts.</p>
+            </div>
         </div>
     </div>
 </body>

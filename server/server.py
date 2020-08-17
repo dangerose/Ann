@@ -54,6 +54,7 @@ class Application(tornado.web.Application):
             (r"/update_main_picid", UpdateMainPicIdHandler),
             (r"/delete_project", DeleteProjectHandler),
             (r"/resort_img", reSortHandler),
+            (r"/resort_pro", reSortProHandler),
             (r"/static/(.*)", StaticHandler, {'path': os.path.join(os.path.dirname(__file__), "../static")})
         ]
         settings = dict(
@@ -374,7 +375,7 @@ class DeleteProjectHandler(BaseHandler):
             cursor.execute(sqlDelProject % projectId)
             connect.commit()
             # 更新其它排序
-            cursor.execute(sqlSortDownProject % (proNum, projectId))
+            cursor.execute(sqlSortDownProject % (proNum, menuId))
             connect.commit()
             # 查询项目下的图片
             cursor.execute(sqlQueryProjectImgs % projectId)
@@ -445,6 +446,42 @@ class reSortHandler(BaseHandler):
             connect.close()
             self.finish(return_status)
 
+class reSortProHandler(BaseHandler):
+    def post(self, *args, **kwargs):
+        connect = pymysql.Connect(**sql_config)
+        body = self.request.body
+        args = dict([x.split('=') for x in body.decode().split('&')])
+        pic_data = args.get('proData')
+        pic_data = parse.unquote(pic_data)
+        pic_data = json.loads(pic_data)
+
+        return_status = {
+            "status": None,
+            "msg": None
+        }
+
+        sql = 'UPDATE project SET num = CASE projectId'
+        cursor = connect.cursor()
+        try:
+            pic_id_list = []
+            for pic in pic_data:
+                sql = sql + ' WHEN \'' + pic['projectId'] + '\' THEN ' + str(pic['num'])
+                pic_id_list.append('\'' + pic['projectId'] + '\'')
+            sql = sql + ' END WHERE projectId IN (' + ','.join(pic_id_list) + ')'
+            cursor.execute(sql)
+            connect.commit()
+            return_status["status"] = "ok"
+            return_status["msg"] = "success"
+
+        except Exception as e:
+            return_status["status"] = "fail"
+            return_status["msg"] = str(e)
+            print(e)
+
+        finally:
+            cursor.close()
+            connect.close()
+            self.finish(return_status)
 
 class StaticHandler(tornado.web.StaticFileHandler):
     def set_extra_headers(self, path):

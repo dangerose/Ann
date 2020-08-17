@@ -6,6 +6,7 @@
 
 html {
     font-size: 10px;
+    background-color: #e9e7e782;
 }
 
 body {
@@ -55,19 +56,63 @@ a:hover {
     border: 1px solid #ddd;
     opacity: 0.7;
     z-index: 1000000;
+    height: 140px;
 
-    .content-img_layer {
+    .content-img_layer, .content-project_layer {
         display: none;
     }
 }
 
 .dash {
     display: inline-block;
-    width: calc(25% - 1px);
+    width: 140px;
+    height: 140px;
     > div {
         outline: 1px dashed #f00;
         height: 100%;
     }
+}
+
+.intro {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    background: transparent;
+    animation: zoomAni .5s;
+    overflow: auto;
+}
+
+.intro-overlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0.9;
+    background: rgba(0,0,0,.9);
+}
+
+.intro-cont {
+    color: white;
+    position: relative;
+    width: 54%;
+    /* text-align: justify; */
+    margin: 10% auto;
+}
+
+.c-indent {
+    text-indent: 26px;
+}
+
+.c-head, .e-head {
+    text-align: center;
+}
+
+.english {
+    font-family: 'Times New Roman', Times, serif;;
 }
 
 /* ------- 图片放大插件 ----- */

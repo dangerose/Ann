@@ -12,7 +12,7 @@
                 // 上滑
                 that._prev()
             }
-        }, 200));
+        }, 500));
 
         this.mainPicId = ''
         this.rightCount = 0 // 记住向右滚动了几次

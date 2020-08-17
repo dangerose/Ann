@@ -45,6 +45,7 @@
         }
     };
 
+    var _menuProData = []
     var _menuPicData = []
 
     // 面包屑导航
@@ -84,7 +85,7 @@
             $.get("/get_project?menuId=" + menuId, function (data) {
                 if (data.status === 'ok') {
                     // 加载图片
-                    projectData = data.data
+                    var projectData = _menuProData = data.data
                     projectData.forEach(function (ele) {
                         var html = '';
                         if (ele.mainPicPath) {
@@ -93,6 +94,7 @@
                                             <img data-projectId="${ele.projectId}" data-mainPicId="${ele.mainPicId}" \
                                             data-projectName="${ele.projectName}" \
                                             data-mainPicPath="${ele.mainPicPath}" \
+                                            data-num="${ele.num}" \
                                             class="content-project" src="${ele.mainPicPath}" alt="">\
                                             <div class="content-project_layer ${_isAdmin && Storage.get('hasLogin') ? '' : 'content-project_layer--text'}">\
                                             ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span>' : `<p>${ele.projectName}</p>`}\
@@ -106,6 +108,7 @@
                                             <span class="glyphicon glyphicon-picture content-project" aria-hidden="true" style="font-size: 112px;padding: 28px 0 0;" data-projectId="${ele.projectId}" \
                                             data-mainPicId="${ele.mainPicId}" \
                                             data-mainPicPath="${ele.mainPicPath}"\
+                                            data-num="${ele.num}" \
                                             data-projectName="${ele.projectName}"></span>\
                                             <div class="content-project_layer ${_isAdmin && Storage.get('hasLogin') ? '' : 'content-project_layer--text'}">\
                                             ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span>' : `<p>${ele.projectName}</p>`}\
@@ -115,6 +118,9 @@
                         }
                         $uploadBox.before(html);
                         view.toViewOrEdit();
+                        if (_isAdmin && Storage.get('hasLogin')) {
+                            window.drags('content-project_box', 'div-dash', 'dash', sortProAfterDrag);
+                        }
                     });
                 }
             });
@@ -159,6 +165,7 @@
                         }
                         $uploadBox.before($html);
                         view.toViewOrEdit();
+                        window.drags('content-img_box', 'div-dash', 'dash', sortPicAfterDrag);
                     });
                     success && success()
                 }
@@ -204,6 +211,19 @@
         console.log('add ',_menuPicData)
     }
 
+    function removeProData (proId) {
+        for (var index = 0; index < _menuProData.length; index++) {
+            var element = _menuProData[index];
+            if (element.projectId === proId) {
+                _menuProData.splice(index, 1)
+                break;
+            }
+        }
+        _menuProData.forEach(function (item, i) {
+            item.num = i
+        })
+    }
+
     function sortPicAfterDrag () {
         var $pics = $('.content-img_box')
         var newArr = []
@@ -227,6 +247,35 @@
             contentType:'application/json',
             data:{
                picData: JSON.stringify(_menuPicData)
+            },
+            dataType:'json',
+            success:function (data) {
+            }
+        }) 
+    }
+
+    function sortProAfterDrag () {
+        var $pics = $('.content-project_box')
+        var newArr = []
+        $pics.each(function (i) {
+            var $pic = $(this)
+            let projectId = $pic.find('.content-project').attr('data-projectId')
+            for (var index = 0; index < _menuProData.length; index++) {
+                var element = _menuProData[index];
+                if (element.projectId === projectId) {
+                    element.num = i
+                    newArr.push(element)
+                    break
+                }
+            }
+        })
+        _menuProData = newArr
+        $.ajax({
+            type: 'post',
+            url:'/resort_pro',
+            contentType:'application/json',
+            data:{
+               proData: JSON.stringify(_menuProData)
             },
             dataType:'json',
             success:function (data) {
@@ -307,8 +356,11 @@
 
         // project点击事件
         var $contentImgs = $('#contentImgs');
-        $contentImgs.delegate('.content-project_box', 'click', function () {
+        $contentImgs.delegate('.content-project_box', 'click', function (e) {
             var $box = $(this)
+            var target = e.target
+            if (target.className.indexOf('content-project_remove') >= 0)
+                return
             var $img = $box.find('.content-project');
             var projectId = $img.attr('data-projectId')
             var mainPicId = $img.attr('data-mainPicId')
@@ -482,7 +534,6 @@
                     $uploadBox.removeClass('d-n');
                     // 显示图片删除按钮
                     $imgDelLayer.removeClass('d-n');
-                    /* window.drags('content-img_box', 'div-dash', 'dash', sortPicAfterDrag); */
                 }
                 else {
                     // 隐藏上传按钮
@@ -659,7 +710,7 @@
                         $html.removeAttr('id').removeAttr('data-curMenuId').removeAttr('data-newPicId');
                         console.log('done');
                         addPicData(newPicId);
-                        /* window.drags('content-img_box', 'div-dash', 'dash', sortPicAfterDrag); */
+                        window.drags('content-img_box', 'div-dash', 'dash', sortPicAfterDrag);
                     },
                     progress: function (e, data) {
                         var $img = $('[data-picId="mini_' + data.formData.picId + '"]');

@@ -9,7 +9,7 @@ function drags(name, name2, name3, cb) {
   var initPos = {x: 0, y: 0};  // 记录拖拽元素初始鼠标元素偏移量
 
   $('.' + name).off('mousedown').on('mousedown', function (event) {
-      if ($(event.target).hasClass('content-img_remove'))
+      if ($(event.target).hasClass('content-img_remove') || $(event.target).hasClass('content-project_remove'))
         return
       choose = true;
       // 拖拽对象
@@ -33,10 +33,15 @@ function drags(name, name2, name3, cb) {
 
       // 创建新元素 插入拖拽元素之前的位置(虚线框)
       let elem = `
-        <div class='${name3}' style='height:${thidDivHeight}px;padding:0 ${thidDivOuterWidth - thidDivWidth - 1}px ${thidDivOuterHeight - thidDivHeight - 1}px 0;'>
+        <div class='${name3}' style='padding:0 ${thidDivOuterWidth - thidDivWidth - 1}px ${thidDivOuterHeight - thidDivHeight - 1}px 0;'>
           <div></div>
         </div>
       `
+      /* let elem = `
+        <div class='${name3}' style='height:${thidDivHeight}px;padding:0 ${thidDivOuterWidth - thidDivWidth - 1}px ${thidDivOuterHeight - thidDivHeight - 1}px 0;'>
+          <div></div>
+        </div>
+      ` */
       $(elem).insertBefore(thidDiv);
       tempDiv = $("." + name3);
 
