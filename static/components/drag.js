@@ -9,7 +9,7 @@ function drags(name, name2, name3, cb) {
   var initPos = {x: 0, y: 0};  // 记录拖拽元素初始鼠标元素偏移量
 
   $('.' + name).off('mousedown').on('mousedown', function (event) {
-      if ($(event.target).hasClass('content-img_remove') || $(event.target).hasClass('content-project_remove'))
+      if ($(event.target).hasClass('content-img_remove') || $(event.target).hasClass('content-img_setMain') || $(event.target).hasClass('content-project_remove'))
         return
       choose = true;
       // 拖拽对象
