@@ -354,6 +354,8 @@
             view.switchContView(_curMenuId)
         })
 
+        $('html').delegate('img', "contextmenu", function(e){ return false; });
+
         $('#photoIntro').click(function() {
             $('#intro').removeClass('d-n')
         })

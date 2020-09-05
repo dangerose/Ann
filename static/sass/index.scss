@@ -5,6 +5,11 @@ body, html {
 
 .header {
     height: 110px;
+    width: 100%;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
     display: flex;
     background: white;
     img {
@@ -28,17 +33,20 @@ body, html {
 
 .main {
     height: calc(100% - 110px);
-    background-color: #e9e7e782;
+    background: #F4F6F5;
     display: flex;
+    margin: 110px 0 0 0;
 }
 
 .menu {
     width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding: 110px 0 0 35px;
     overflow: auto;
     text-align: left;
-    top: 0;
-    height: 100%;
-    padding: 0 0 0 35px;
     flex-shrink: 0;
 }
 
@@ -47,6 +55,7 @@ body, html {
     top: 0;
     padding: 31px 50px 25px 40px;
     flex-grow: 1;
+    margin: 0 0 0 250px;
 }
 
 /* 手机 */

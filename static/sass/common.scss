@@ -6,11 +6,12 @@
 
 html {
     font-size: 10px;
-    background-color: #e9e7e782;
+    background-color: #F4F6F5;
 }
 
 body {
     font-size: 1.2rem;
+    background: transparent;
 }
 
 img { 
@@ -74,7 +75,7 @@ a:hover {
 }
 
 .intro {
-    position: absolute;
+    position: fixed;
     height: 100%;
     width: 100%;
     top: 0;
@@ -92,15 +93,17 @@ a:hover {
     top: 0;
     left: 0;
     opacity: 0.9;
-    background: rgba(0,0,0,.9);
+    background: #F4F6F5;
 }
 
 .intro-cont {
-    color: white;
+    color: black;
     position: relative;
     width: 54%;
     /* text-align: justify; */
     margin: 10% auto;
+    font-size: 15px;
+    line-height: 29px;
 }
 
 .c-indent {
@@ -112,7 +115,9 @@ a:hover {
 }
 
 .english {
-    font-family: 'Times New Roman', Times, serif;;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    margin: 30px 0 0;
 }
 
 /* ------- 图片放大插件 ----- */
