@@ -22,7 +22,8 @@ sqlInsert = "INSERT INTO picjf (picId, name, num, path, size, menuId, projectId)
 sqlDel = "DELETE FROM picjf WHERE picId = '%s'"
 sqlSortDown = "UPDATE picjf SET num = num - 1 WHERE num > %d and projectId = '%s'"
 sqlQueryProject = "select pro.*,pic.path from project as pro left join picjf as pic on (pro.mainPicId = pic.picId) where pro.menuId = '%s' order by num"
-sqlAddProject = "INSERT INTO project (projectId, projectName, menuId, num) VALUES ( '%s', '%s', '%s', '%d' )"
+sqlAddProject = "INSERT INTO project (projectId, projectName, menuId, num, projectENName) VALUES ( '%s', '%s', '%s', '%d', '%s' )"
+sqlUpdateProjectName = "UPDATE project SET projectName = '%s' , projectENName = '%s' WHERE projectId = '%s'"
 sqlQueryProjectById = "select * from project where projectId = '%s'"
 sqlDelProject = "DELETE FROM project WHERE projectId = '%s'"
 sqlDelProjectImgs = "DELETE FROM picjf WHERE projectId = '%s'"
@@ -51,6 +52,7 @@ class Application(tornado.web.Application):
             (r"/get_img_path", GetPathHandler),
             (r"/get_project", GetProjectHandler),
             (r"/add_project", AddProjectHandler),
+            (r"/update_project", UpdateProjectHandler),
             (r"/update_main_picid", UpdateMainPicIdHandler),
             (r"/delete_project", DeleteProjectHandler),
             (r"/resort_img", reSortHandler),
@@ -274,10 +276,11 @@ class GetProjectHandler(BaseHandler):
                 if row[0] is not None:
                     data = {}
                     data['projectId'] = row[0]
-                    data['projectName'] = row[1]
+                    data['projectCNName'] = row[1]
                     data['mainPicId'] = row[2]
                     data['num'] = row[4]
-                    data['mainPicPath'] = row[5]
+                    data['projectENName'] = row[5]
+                    data['mainPicPath'] = row[6]
                     return_data['data'].append(data)
             return_data['status'] = 'ok'
             return_data['msg'] = 'success'
@@ -294,7 +297,8 @@ class GetProjectHandler(BaseHandler):
 class AddProjectHandler(BaseHandler):
     def get(self, *args, **kwargs):
         connect = pymysql.Connect(**sql_config)
-        projectName = self.get_argument('projectName', None)
+        projectName = self.get_argument('projectCNName', None)
+        projectENName = self.get_argument('projectENName', None)
         menuId = self.get_argument('menuId', None)
 
         return_data = {
@@ -311,10 +315,39 @@ class AddProjectHandler(BaseHandler):
             connect.commit()
             total_num_in_menu = cursor.rowcount
             projectId = menuId + '_project' + str(int(round(t * 1000000))) # 微秒
-            cursor.execute(sqlAddProject % (projectId, projectName, menuId, total_num_in_menu))
+            cursor.execute(sqlAddProject % (projectId, projectName, menuId, total_num_in_menu, projectENName))
             connect.commit()
             return_data['status'] = 'ok'
             return_data['msg'] = '新增项目成功'
+
+        except Exception as e:
+            return_data['status'] = 'fail'
+            return_data['msg'] = str(e)
+
+        finally:
+            cursor.close()
+            connect.close()
+            self.finish(return_data)
+
+class UpdateProjectHandler(BaseHandler):
+    def get(self, *args, **kwargs):
+        connect = pymysql.Connect(**sql_config)
+        projectName = self.get_argument('projectCNName', None)
+        projectENName = self.get_argument('projectENName', None)
+        projectId = self.get_argument('projectId', None)
+
+        return_data = {
+            "status": None,
+            "msg": None,
+            "data": []
+        }
+
+        cursor = connect.cursor()
+        try:
+            cursor.execute(sqlUpdateProjectName % (projectName, projectENName, projectId))
+            connect.commit()
+            return_data['status'] = 'ok'
+            return_data['msg'] = '修改项目成功'
 
         except Exception as e:
             return_data['status'] = 'fail'

@@ -48,6 +48,29 @@
     var _menuProData = []
     var _menuPicData = []
 
+    var addDialog = {
+        show: function(type) {
+            _showAddProDialog()
+            this.changeView(type)
+        },
+        changeView: function(type) {
+            var $addProDialog = $('#addProDialog')
+            var $head = $addProDialog.find('.dialog__header')
+            var $btnAddPro = $('#btnAddPro')
+            var $btnUpdatePro = $('#btnUpdatePro')
+            if (type === 'add') {
+                $head.html('新增项目')
+                $btnAddPro.removeClass('d-n')
+                $btnUpdatePro.addClass('d-n')
+            }
+            else {
+                $head.html('修改项目')
+                $btnAddPro.addClass('d-n')
+                $btnUpdatePro.removeClass('d-n')
+            }
+        }
+    }
+
     // 面包屑导航
     var breadCrumb = {
         $ele: $('#breadCrumb'),
@@ -92,12 +115,13 @@
                             html = `<div class="content-project_box">\
                                         <div class="content-project_wrap">\
                                             <img data-projectId="${ele.projectId}" data-mainPicId="${ele.mainPicId}" \
-                                            data-projectName="${ele.projectName}" \
+                                            data-projectCNName="${ele.projectCNName}" \
+                                            data-projectENName="${ele.projectENName || ''}" \
                                             data-mainPicPath="${ele.mainPicPath}" \
                                             data-num="${ele.num}" \
                                             class="content-project" src="${ele.mainPicPath}" alt="">\
                                             <div class="content-project_layer ${_isAdmin && Storage.get('hasLogin') ? '' : 'content-project_layer--text'}">\
-                                            ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span>' : `<p>${ele.projectName}</p>`}\
+                                            ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span><span class="content-project_split"></span><span class="glyphicon glyphicon-edit content-project_edit"></span>' : `<div><p>${ele.projectCNName}</p><p>${ele.projectENName || ''}</p></div>`}\
                                             </div>\
                                         </div>\
                                     </div>`
@@ -109,9 +133,10 @@
                                             data-mainPicId="${ele.mainPicId}" \
                                             data-mainPicPath="${ele.mainPicPath}"\
                                             data-num="${ele.num}" \
-                                            data-projectName="${ele.projectName}"></span>\
+                                            data-projectCNName="${ele.projectCNName}"\
+                                            data-projectENName="${ele.projectENName || ''}"></span>\
                                             <div class="content-project_layer ${_isAdmin && Storage.get('hasLogin') ? '' : 'content-project_layer--text'}">\
-                                            ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span>' : `<p>${ele.projectName}</p>`}\
+                                            ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span><span class="content-project_split"></span><span class="glyphicon glyphicon-edit content-project_edit"></span>' : `<div><p>${ele.projectCNName}</p><p>${ele.projectENName || ''}</p></div>`}\
                                             </div>\
                                         </div>\
                                     </div>`
@@ -369,14 +394,14 @@
         $contentImgs.delegate('.content-project_box', 'click', function (e) {
             var $box = $(this)
             var target = e.target
-            if (target.className.indexOf('content-project_remove') >= 0)
+            if (target.className.indexOf('content-project_remove') >= 0 || target.className.indexOf('content-project_edit'))
                 return
             var $img = $box.find('.content-project');
             var projectId = $img.attr('data-projectId')
             var mainPicId = $img.attr('data-mainPicId')
-            var projectName = $img.attr('data-projectName')
+            var projectCNName = $img.attr('data-projectCNName')
             var mainPicPath = $img.attr('data-mainPicPath')
-            breadCrumb.update([_curMenuName, projectName])
+            breadCrumb.update([_curMenuName, projectCNName])
             _curProjectId = projectId
             _mainPicIdInCurProject = mainPicId
             if (_isAdmin) {
@@ -439,6 +464,18 @@
             })
         });
 
+        // 项目编辑事件
+        $contentImgs.delegate('.content-project_edit', 'click', function () {
+            var $iconEdit = $(this);
+            var $img = $iconEdit.parent().siblings('.content-project');
+            var projectCNName = $img.attr('data-projectCNName');
+            var projectENName = $img.attr('data-projectENName');
+            _curProjectId = $img.attr('data-projectId');
+            $('[name=projectCNName]').val(projectCNName)
+            $('[name=projectENName]').val(projectENName)
+            addDialog.show('edit')
+        });
+
         // 打开登录窗口 事件
         var dlgtrigger = document.querySelector('[data-dialog=somedialog]'),
             somedialog = document.getElementById('somedialog'),
@@ -472,16 +509,34 @@
         // 新增项目事件
         var $btnAddPro = $('#btnAddPro');
         $btnAddPro.on('click', function () {
-            var $projectName = $('[name=projectName]');
-            if ($projectName.val()) {
-                $.get("/add_project?menuId="+ _curMenuId +"&projectName=" + $projectName.val(), function (data) {
+            var $projectCNName = $('[name=projectCNName]');
+            var $projectENName = $('[name=projectENName]');
+            if ($projectCNName.val() && $projectENName.val()) {
+                $.get("/add_project?menuId="+ _curMenuId + "&projectCNName=" + $projectCNName.val() + "&projectENName=" + $projectENName.val(), function (data) {
                     if (data.status === 'ok') {
-                        view.changeBtnAddPro('success');
+                        view.changeBtnAddPro('success', 'btnAddPro');
                     }
                 });
             }
             else {
-                view.changeBtnAddPro('fail');
+                view.changeBtnAddPro('fail', 'btnAddPro');
+            }
+        });
+
+        // 修改项目事件
+        var $btnUpdatePro = $('#btnUpdatePro');
+        $btnUpdatePro.on('click', function () {
+            var $projectCNName = $('[name=projectCNName]');
+            var $projectENName = $('[name=projectENName]');
+            if ($projectCNName.val() && $projectENName.val()) {
+                $.get("/update_project?projectId="+ _curProjectId + "&projectCNName=" + $projectCNName.val() + "&projectENName=" + $projectENName.val(), function (data) {
+                    if (data.status === 'ok') {
+                        view.changeBtnAddPro('success', 'btnUpdatePro');
+                    }
+                });
+            }
+            else {
+                view.changeBtnAddPro('fail', 'btnUpdatePro');
             }
         });
 
@@ -596,28 +651,29 @@
                 }, 1000);
             }
         },
-        changeBtnAddPro: function (type) {
+        changeBtnAddPro: function (type, id) {
             if (!_isAdmin) {
                 return;
             }
-            var $btnAddPro = $('#btnAddPro');
+            var $btnAddPro = $('#' + id);
             $btnAddPro.css('border', 'none').css('outline', 'none')
+            var originText = $btnAddPro.text()
             if (type === 'success') {
-                $btnAddPro.text('新增成功');
+                $btnAddPro.text('操作成功');
                 $btnAddPro.css('pointer-events', 'none').addClass('green').removeClass('black');
                 setTimeout(function () {
                     _showAddProDialog();
                     view.clearContView()
                     project.get(_curMenuId)
-                    $btnAddPro.text('新增');
+                    $btnAddPro.text(originText);
                     $btnAddPro.css('pointer-events', 'auto').addClass('black').removeClass('green');
                 }, 1000);
             }
             else {
-                $btnAddPro.text('请输入项目名称');
+                $btnAddPro.text('请填写完整');
                 $btnAddPro.css('pointer-events', 'none').addClass('red').removeClass('black');
                 setTimeout(function () {
-                    $btnAddPro.text('新增');
+                    $btnAddPro.text(originText);
                     $btnAddPro.css('pointer-events', 'auto').addClass('black').removeClass('red');
                 }, 1000);
             }
@@ -656,8 +712,8 @@
         // 事件
         $uploadBox.off('click').click(function () {
             if (breadCrumb.level === 1) {
-                var $projectName = $('[name=projectName]')
-                $projectName.focus()
+                var $projectCNName = $('[name=projectCNName]')
+                $projectCNName.focus()
                 _showAddProDialog()
             }
             else {

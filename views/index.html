@@ -152,11 +152,18 @@
             <div style="display: none;"><button id="btnClose" class="action" data-dialog-close>Close</button></div>
             <div class="input-group">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">项目名称</button>
+                    <button class="btn btn-default" type="button" tabindex="-1">中文名</button>
                 </span>
-                <input name="projectName" type="text" class="form-control" placeholder="请输入...">
+                <input name="projectCNName" type="text" class="form-control" placeholder="请输入...">
+            </div>
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" tabindex="-1">英文名</button>
+                </span>
+                <input name="projectENName" type="text" class="form-control" placeholder="请输入...">
             </div>
             <button id="btnAddPro" type="button" class="btn btn-default btn-block login-btn black">新增</button>
+            <button id="btnUpdatePro" type="button" class="btn btn-default btn-block login-btn black d-n">修改</button>
         </div>
     </div>
     <!-- 模态框（Modal-新增项目窗口） -->

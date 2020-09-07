@@ -217,6 +217,31 @@ body, html {
     position: relative;
 }
 
+.content-project_split {
+    position: absolute;
+    width: 2px;
+    left: calc(50% - 1px);
+    top: 20%;
+    height: 60%;
+    background-color: #5a5d5ee8;
+    transform: rotate(33deg);
+}
+
+.content-project_edit {
+    position: absolute;
+    font-size: 26px;
+    right: calc(25% - 13px);
+    top: calc(50% - 13px);
+    font-weight: bold;
+    cursor: pointer;
+    color: #5ab85c;
+    transition: all 150ms ease-in;
+
+    &:hover {
+        text-shadow: 0px 0 5px;
+    }
+}
+
 .content-project_progress {
     margin: 10px;
     height: 15px;
@@ -239,13 +264,17 @@ body, html {
         justify-content: center;
         cursor: pointer;
         transition: all 300ms ease-out;
+        flex-wrap: wrap;
+
+        div {
+            width: 80%;
+        }
 
 
         p {
             margin: 0;
             color: white;
             font-size: 16px;
-            width: 80%;
             text-align: center;
         }
     }
@@ -253,9 +282,9 @@ body, html {
 
 .content-project_remove {
     position: absolute;
-    top: calc(50% - 13px);
-    right: calc(50% - 13px);
     font-size: 26px;
+    left: calc(25% - 13px);
+    top: calc(50% - 13px);
     font-weight: bold;
     cursor: pointer;
     color: rgb(217, 84, 79);
