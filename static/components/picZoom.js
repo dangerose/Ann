@@ -14,6 +14,16 @@
             }
         }, 500));
 
+        $(document).keydown(function (event) {
+            var keyNum = event.which;  //获取键值
+            switch (keyNum) { //判断按键
+                case 37: that._prev(); break;
+                case 39: that._next(); break;
+                default:
+                    break;
+            }
+        });
+
         this.mainPicId = ''
         this.rightCount = 0 // 记住向右滚动了几次
     }
@@ -134,22 +144,17 @@
         var itemOR = bodyW - itemOL - itemOW
         if (num !== 1 && (itemOL - boxMarginL) < itemOW) {
             // 左侧图片
-            requestAnimationFrame(function (params) {
-                $zoomMiniPicList.css('transform', `translateX(${parseInt(listTranslateX + itemOW + 3)}px)`)
-                that.rightCount--
-            })
+            $zoomMiniPicList.css('transform', `translateX(${parseInt(listTranslateX + itemOW + 3)}px)`)
+            that.rightCount--
         } else if (num !== this.totalNum && (itemOR - boxMarginR) < itemOW) {
             // 右侧图片
-            requestAnimationFrame(function (params) {
-                $zoomMiniPicList.css('transform', `translateX(${parseInt(listTranslateX - itemOW - 3)}px)`)
-                that.rightCount++
-            })
+            $zoomMiniPicList.css('transform', `translateX(${parseInt(listTranslateX - itemOW - 3)}px)`)
+            that.rightCount++
         }
-        this._correct(num, itemOW)
         return true
     }
 
-    picZoom.prototype._correct = function(curNum, itemOW) {
+    picZoom.prototype._correct = function (curNum, itemOW) {
         var $zoomMiniPicList = $('#zoomMiniPicList')
         console.log(curNum)
         if (curNum === 1) {
@@ -163,13 +168,15 @@
     picZoom.prototype._setMainPic = function (url) {
         var temp = url.split('/')
         var picId = temp[temp.length - 1]
-        var $pic = $('.zoom-pic');
-        var $newZoom = $('#zoom');
-        $pic.attr('onload', function () {
-            $pic.removeClass('d-n');
-            $newZoom.find('.zoom-load').addClass('d-n');
+        var $img = $('#zoomMainImg');
+        var $loadicon = $('#zoomLoadicon');
+        $img.addClass('d-n')
+        $loadicon.removeClass('d-n')
+        $img.attr('src', url);
+        $img.off('load').on('load', function () {
+            $img.removeClass('d-n');
+            $loadicon.addClass('d-n')
         });
-        $pic.attr('src', url);
         this.mainPicId = picId
         this._setMiniStyle(picId)
     }

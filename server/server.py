@@ -118,10 +118,10 @@ class UploadHandler(BaseHandler):
                 height = img.size[1]
                 print('origin {0} *{1}'.format(width, height))
 
-                if height > 150:
-                    width = width * 150.0 / height
-                new_size = (int(width), 150)
-                print('new {0} * 150'.format(width))
+                if height > 300:
+                    width = width * 300.0 / height
+                new_size = (int(width), 300)
+                print('new {0} * 300'.format(width))
                 mini_img = img.resize(new_size,Image.BILINEAR)
                 mini_img.save(min_img)
 
@@ -258,6 +258,22 @@ class GetPathHandler(BaseHandler):
 
 class GetProjectHandler(BaseHandler):
     def get(self, *args, **kwargs):
+        # list = os.listdir('../static/img/menu01')
+        # for i in range(0, len(list)):
+        #     picId = list[i]
+        #     mini_name = 'mini_' + list[i]
+        #     save_to = '../static/img/menu01/' + picId
+        #     min_img = '../static/img/menu01/' + mini_name
+        #     img = Image.open(save_to)
+        #     width = img.size[0]
+        #     height = img.size[1]
+        #     if height > 300:
+        #         width = width * 300.0 / height
+        #     new_size = (int(width), 300)
+        #     mini_img = img.resize(new_size, Image.BILINEAR)
+        #     mini_img.save(min_img)
+        #     print(mini_name)
+
         connect = pymysql.Connect(**sql_config)
         menuId = self.get_argument('menuId', None)
 

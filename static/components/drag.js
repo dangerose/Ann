@@ -7,11 +7,13 @@ function drags(name, name2, name3, cb) {
   var thidDivWidth = 0, thidDivHeight = 0, thidDivHalfW = 0, thidDivHalfH = 0, tarFirstX = 0, tarFirstY = 0;
   var tarDiv = null, tarFirst, tempDiv; // 要插入的目标元素的对象, 临时的虚线对象
   var initPos = {x: 0, y: 0};  // 记录拖拽元素初始鼠标元素偏移量
+  var startTime = 0 // 少于100为点击
 
   $('.' + name).off('mousedown').on('mousedown', function (event) {
       if ($(event.target).hasClass('content-img_remove') || $(event.target).hasClass('content-img_setMain') || $(event.target).hasClass('content-project_remove') || $(event.target).hasClass('content-project_edit'))
         return
       choose = true;
+      startTime = new Date().getTime()
       // 拖拽对象
       thidDiv = $(this);
       // 记录拖拽元素初始位置
@@ -28,12 +30,12 @@ function drags(name, name2, name3, cb) {
       thidDivOuterHeight = thidDiv.outerHeight();
       thidDivHalfW = thidDivWidth / 2;
       thidDivHalfH = thidDivHeight / 2;
-      thidDiv.attr("class", name2);
+      thidDiv.attr('class', name2);
       thidDiv.css({left: initPos.x + 'px', top: initPos.y + 'px'});
 
       // 创建新元素 插入拖拽元素之前的位置(虚线框)
       let elem = `
-        <div class='${name3}' style='padding:0 ${thidDivOuterWidth - thidDivWidth - 1}px ${thidDivOuterHeight - thidDivHeight - 1}px 0;'>
+        <div class='${name3}' style='width: ${thidDivWidth}px;height: ${thidDivHeight}px;padding:0 ${thidDivOuterWidth - thidDivWidth - 1}px ${thidDivOuterHeight - thidDivHeight - 1}px 0;'>
           <div></div>
         </div>
       `
@@ -48,7 +50,17 @@ function drags(name, name2, name3, cb) {
   });
 
   $(document).on('mouseup', function (event) {
-
+      let now = new Date().getTime()
+      if (startTime > 0 && now - startTime > 0 && now - startTime < 200) {
+        // 触发click事件console.log(event.starget)
+        var $img = $(event.target)
+        var $project = $img.parents('.div-dash')
+        $project.trigger('click')
+        thidDiv.attr("class", name);
+        tempDiv.remove(); // 删除新建的虚线div
+        choose = false;
+        return false
+      }
       if (!choose) {
           return false;
       }
@@ -68,7 +80,6 @@ function drags(name, name2, name3, cb) {
       cb && cb();
 
   }).on('mousemove', function (event) {
-
       if (!choose) return false;
 
       move = true;

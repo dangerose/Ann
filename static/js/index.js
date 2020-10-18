@@ -112,6 +112,8 @@
                     projectData.forEach(function (ele) {
                         var html = '';
                         if (ele.mainPicPath) {
+                            let i = ele.mainPicPath.lastIndexOf('/')
+                            ele.mainPicPath = ele.mainPicPath.substr(0, i+1) + 'mini_' + ele.mainPicPath.substr(i+1)
                             html = `<div class="content-project_box">\
                                         <div class="content-project_wrap">\
                                             <img data-projectId="${ele.projectId}" data-mainPicId="${ele.mainPicId}" \
@@ -121,22 +123,22 @@
                                             data-num="${ele.num}" \
                                             class="content-project" src="${ele.mainPicPath}" alt="">\
                                             <div class="content-project_layer ${_isAdmin && Storage.get('hasLogin') ? '' : 'content-project_layer--text'}">\
-                                            ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span><span class="content-project_split"></span><span class="glyphicon glyphicon-edit content-project_edit"></span>' : `<div><p>${ele.projectCNName}</p><p>${ele.projectENName || ''}</p></div>`}\
+                                            ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span><span class="content-project_split"></span><span class="glyphicon glyphicon-edit content-project_edit"></span>' : `<div><p>${ele.projectCNName}</p><p style="letter-spacing: 1px;">${ele.projectENName || ''}</p></div>`}\
                                             </div>\
                                         </div>\
                                     </div>`
                         }
                         else {
                             html = `<div class="content-project_box">\
-                                        <div class="content-project_wrap">\
-                                            <span class="glyphicon glyphicon-picture content-project" aria-hidden="true" style="font-size: 112px;padding: 28px 0 0;" data-projectId="${ele.projectId}" \
+                                        <div class="content-project_wrap" style="display:flex;align-items:flex-end">\
+                                            <span class="glyphicon glyphicon-picture content-project" aria-hidden="true" style="font-size: 112px;height:112px;height:auto;" data-projectId="${ele.projectId}" \
                                             data-mainPicId="${ele.mainPicId}" \
                                             data-mainPicPath="${ele.mainPicPath}"\
                                             data-num="${ele.num}" \
                                             data-projectCNName="${ele.projectCNName}"\
                                             data-projectENName="${ele.projectENName || ''}"></span>\
                                             <div class="content-project_layer ${_isAdmin && Storage.get('hasLogin') ? '' : 'content-project_layer--text'}">\
-                                            ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span><span class="content-project_split"></span><span class="glyphicon glyphicon-edit content-project_edit"></span>' : `<div><p>${ele.projectCNName}</p><p>${ele.projectENName || ''}</p></div>`}\
+                                            ${(_isAdmin && Storage.get('hasLogin')) ? '<span class="glyphicon glyphicon-remove content-project_remove"></span><span class="content-project_split"></span><span class="glyphicon glyphicon-edit content-project_edit"></span>' : `<div><p>${ele.projectCNName}</p><p style="letter-spacing: 1px;">${ele.projectENName || ''}</p></div>`}\
                                             </div>\
                                         </div>\
                                     </div>`
@@ -163,9 +165,16 @@
     }
 
     var projectImg = {
+        isLoading: false,
         get: function(projectId, notCreateHtml, success) {
             var $uploadBox = $('#uploadBox')
+            var that = this
+            if (this.isLoading) {
+                return
+            }
+            this.isLoading = true
             $.get("/get_img_path?menuId="+ _curMenuId +"&projectId=" + projectId + '&time=' + new Date().getTime(), function (data) {
+                that.isLoading = false
                 if (data.status === 'ok') {
                     // 加载图片
                     _menuPicData = data.data
@@ -391,16 +400,18 @@
 
         // project点击事件
         var $contentImgs = $('#contentImgs');
-        $contentImgs.delegate('.content-project_box', 'click', function (e) {
+        $contentImgs.delegate('.content-project_box,.div-dash', 'click', function (e) {
             var $box = $(this)
             var target = e.target
-            if (target.className.indexOf('content-project_remove') >= 0 || target.className.indexOf('content-project_edit'))
+            if (target.className.indexOf('content-project_remove') >= 0 || target.className.indexOf('content-project_edit') >= 0)
                 return
             var $img = $box.find('.content-project');
             var projectId = $img.attr('data-projectId')
             var mainPicId = $img.attr('data-mainPicId')
             var projectCNName = $img.attr('data-projectCNName')
             var mainPicPath = $img.attr('data-mainPicPath')
+            if (!projectId)
+              return
             breadCrumb.update([_curMenuName, projectCNName])
             _curProjectId = projectId
             _mainPicIdInCurProject = mainPicId
@@ -553,6 +564,7 @@
                 view.changeBtnShow();
                 setTimeout(function () {
                     $('#btnClose').trigger('click');
+                    window.location.reload();
                 }, 1000);
             }
             else {
@@ -708,6 +720,8 @@
     function initFileInput () {
         var $uploadBox = $('#uploadBox');
         var $fileupload = $('#fileupload');
+        var count = 0
+        var lastTime = 0
         
         // 事件
         $uploadBox.off('click').click(function () {
@@ -721,18 +735,26 @@
                 $fileupload.parent().click(function (e) {
                     e.stopPropagation();
                 });
-
+                
                 $fileupload.trigger('click').fileupload({
                     url: '/upload_img',
                     dataType: 'json',
-                    /* sequentialUploads: true, // 是否按顺序一个个上传 */
-                    limitConcurrentUploads: 3,
+                    sequentialUploads: true, // 是否按顺序一个个上传
+                    limitConcurrentUploads: 1,
                     add: function (e, data) {
                         var allowTypes = ['jpg'];
                         var _type = $(data.files[0].name.split('.')).last()[0].toLowerCase(); // 文件后缀
                         var $html, newPicId;
+                        var time = new Date().getTime() + ''
+                        if (time === lastTime) {
+                            count++
+                            time += count
+                        } else {
+                            count = 0
+                            lastTime = time
+                        }
 
-                        newPicId = _curMenuId + '_' + new Date().getTime() + '.' + _type;
+                        newPicId = _curMenuId + '_' + time + '.' + _type;
                         if ($.inArray(_type, allowTypes) != -1) {
                             data.formData = {
                                 menuId: _curMenuId,

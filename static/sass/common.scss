@@ -57,7 +57,8 @@ a:hover {
     border: 1px solid #ddd;
     opacity: 0.7;
     z-index: 1000000;
-    height: 140px;
+    height: 200px;
+    transition: none!important;
 
     .content-img_layer, .content-project_layer {
         display: none;
@@ -141,6 +142,12 @@ a:hover {
     }
 }
 
+.zoom-img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
 .zoom-content, .zoom-load {
     position: fixed;
     height: 100%;
@@ -171,17 +178,19 @@ a:hover {
     width: 100%;
     top: 0;
     left: 0;
-    opacity: 0.9;
-    background: rgba(0,0,0,.9);
+    background: rgba(153,153,153,.97);
 }
 
 .zoom-pic {
     height: 85%;
     max-width: 95%;
     margin: 0px auto;
-    padding: 20px 0;
+    padding: 30px 0;
     display: block;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .zoom-pic--mini {
