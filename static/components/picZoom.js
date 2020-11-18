@@ -2,7 +2,6 @@
 (function () {
     function picZoom () {
         var $zoom = $('#zoom')
-        var $zoom = $('#zoom')
         var that = this
         $zoom.mousewheel(throttle(function (event, delta, deltaX, deltaY) {
             if (delta === -1) {
@@ -12,7 +11,7 @@
                 // 上滑
                 that._prev()
             }
-        }, 500));
+        }, 100));
 
         $(document).keydown(function (event) {
             var keyNum = event.which;  //获取键值
@@ -24,6 +23,7 @@
             }
         });
 
+        this.translateX = 0
         this.mainPicId = ''
         this.rightCount = 0 // 记住向右滚动了几次
     }
@@ -62,6 +62,7 @@
         let $zoomNum = $('#zoomNum')
         $zoomNum.html('1')
         $('#zoomMiniPicList').html('').css('transform', 'translateX(0)');
+        this.translateX = 0
     }
     // 添加
     picZoom.prototype._add = function (url, picData) {
@@ -128,8 +129,6 @@
         var that = this
         var $zoomMiniPicListBox = $('#zoomMiniPicListBox')
         var $zoomMiniPicList = $('#zoomMiniPicList')
-        var temp = $zoomMiniPicList.css("transform").replace(/\s/g, '').split(',')[4]
-        listTranslateX = parseInt(temp)
         var $curSelPic = $(`.zoom-mini-pic[data-picId="${picId}"]`)
         var num = parseInt($curSelPic.attr('data-num'))
         var $zoomMiniPicItem = $curSelPic.parent()
@@ -142,13 +141,15 @@
         var itemOL = parseInt(client.x)
         var itemOW = client.width
         var itemOR = bodyW - itemOL - itemOW
-        if (num !== 1 && (itemOL - boxMarginL) < itemOW) {
+        if ((itemOL - boxMarginL) < itemOW) {
             // 左侧图片
-            $zoomMiniPicList.css('transform', `translateX(${parseInt(listTranslateX + itemOW + 3)}px)`)
+            this.translateX = this.translateX + itemOW
+            $zoomMiniPicList.css('transform', `translateX(${this.translateX}px)`)
             that.rightCount--
-        } else if (num !== this.totalNum && (itemOR - boxMarginR) < itemOW) {
+        } else if ((itemOR - boxMarginR) < itemOW) {
             // 右侧图片
-            $zoomMiniPicList.css('transform', `translateX(${parseInt(listTranslateX - itemOW - 3)}px)`)
+            this.translateX = this.translateX - itemOW
+            $zoomMiniPicList.css('transform', `translateX(${this.translateX}px)`)
             that.rightCount++
         }
         return true

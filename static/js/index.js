@@ -153,12 +153,18 @@
             });
         },
         delete: function(projectId) {
+            var $btnCommon = $('#btnCommon')
+            $btnCommon.attr('disabled', true)
             $.get("/delete_project?projectId=" + projectId + "&menuId=" + _curMenuId, function (data) {
                 if (data.status === 'ok') {
-                    commonDialog.changeBtnView('success', '删除成功', true)
+                    commonDialog.changeBtnView('success', '删除成功', true, function() {
+                        $btnCommon.removeAttr('disabled')
+                    })
                 }
                 else {
-                    commonDialog.changeBtnView('fail', '删除失败', true)
+                    commonDialog.changeBtnView('fail', '删除失败', true, function() {
+                        $btnCommon.removeAttr('disabled')
+                    })
                 }
             })
         }
@@ -328,27 +334,29 @@
         close: function () {
             _showCommonDialog()
         },
-        changeBtnView: function(type, text, isClose) {
+        changeBtnView: function(type, text, isClose, call) {
             var $btnCommon = $('#btnCommon');
             $btnCommon.css('border', 'none').css('outline', 'none')
             if (type === 'success') {
                 $btnCommon.text(text);
-                $btnCommon.css('pointer-events', 'none').addClass('green').removeClass('black');
+                $btnCommon.addClass('green').removeClass('black');
                 setTimeout(function () {
                     $btnCommon.text('确定');
-                    $btnCommon.css('pointer-events', 'auto').addClass('black').removeClass('green');
+                    $btnCommon.addClass('black').removeClass('green');
                     if (isClose)
                         commonDialog.close()
+                    call && call()
                 }, 1000);
             }
             else {
                 $btnCommon.text(text);
-                $btnCommon.css('pointer-events', 'none').addClass('red').removeClass('black');
+                $btnCommon.addClass('red').removeClass('black');
                 setTimeout(function () {
                     $btnCommon.text('确定');
-                    $btnCommon.css('pointer-events', 'auto').addClass('black').removeClass('red');
+                    $btnCommon.addClass('black').removeClass('red');
                     if (isClose)
                         commonDialog.close()
+                    call && call()
                 }, 1000);
             }
         }
@@ -391,10 +399,12 @@
         $('html').delegate('img', "contextmenu", function(e){ return false; });
 
         $('#photoIntro').click(function() {
+            $('body').css('overflow', 'hidden');
             $('#intro').removeClass('d-n')
         })
 
         $('#intro').click(function () {
+            $('body').css('overflow', 'auto');
             $('#intro').addClass('d-n')
         })
 
@@ -464,7 +474,7 @@
         });
 
         // 项目删除事件
-        $contentImgs.delegate('.content-project_remove', 'click', function () {
+        $contentImgs.delegate('.content-project_remove', 'click', function (e) {
             var $iconRemove = $(this);
             var $img = $iconRemove.parent().siblings('.content-project');
             var projectId = $img.attr('data-projectId');
@@ -522,10 +532,17 @@
         $btnAddPro.on('click', function () {
             var $projectCNName = $('[name=projectCNName]');
             var $projectENName = $('[name=projectENName]');
+            var $btnAddPro = $('#btnAddPro');
+            var $btnUpdatePro = $('#btnUpdatePro');
             if ($projectCNName.val() && $projectENName.val()) {
+                $btnAddPro.attr('disabled', true)
+                $btnUpdatePro.attr('disabled', true)
                 $.get("/add_project?menuId="+ _curMenuId + "&projectCNName=" + $projectCNName.val() + "&projectENName=" + $projectENName.val(), function (data) {
                     if (data.status === 'ok') {
-                        view.changeBtnAddPro('success', 'btnAddPro');
+                        view.changeBtnAddPro('success', 'btnAddPro', function() {
+                            $btnAddPro.removeAttr('disabled')
+                            $btnUpdatePro.removeAttr('disabled')
+                        });
                     }
                 });
             }
@@ -539,10 +556,17 @@
         $btnUpdatePro.on('click', function () {
             var $projectCNName = $('[name=projectCNName]');
             var $projectENName = $('[name=projectENName]');
+            var $btnAddPro = $('#btnAddPro');
+            var $btnUpdatePro = $('#btnUpdatePro');
             if ($projectCNName.val() && $projectENName.val()) {
+                $btnAddPro.attr('disabled', true)
+                $btnUpdatePro.attr('disabled', true)
                 $.get("/update_project?projectId="+ _curProjectId + "&projectCNName=" + $projectCNName.val() + "&projectENName=" + $projectENName.val(), function (data) {
                     if (data.status === 'ok') {
-                        view.changeBtnAddPro('success', 'btnUpdatePro');
+                        view.changeBtnAddPro('success', 'btnUpdatePro', function() {
+                            $btnAddPro.removeAttr('disabled')
+                            $btnUpdatePro.removeAttr('disabled')
+                        });
                     }
                 });
             }
@@ -648,45 +672,47 @@
             $btnLogin.css('border', 'none').css('outline', 'none')
             if (type === 'success') {
                 $btnLogin.text('登录成功');
-                $btnLogin.css('pointer-events', 'none').addClass('green').removeClass('black');
+                $btnLogin.addClass('green').removeClass('black');
                 setTimeout(function () {
                     $btnLogin.text('登录');
-                    $btnLogin.css('pointer-events', 'auto').addClass('black').removeClass('green');
+                    $btnLogin.addClass('black').removeClass('green');
                 }, 1000);
             }
             else {
                 $btnLogin.text('用户名或密码错误');
-                $btnLogin.css('pointer-events', 'none').addClass('red').removeClass('black');
+                $btnLogin.addClass('red').removeClass('black');
                 setTimeout(function () {
                     $btnLogin.text('登录');
-                    $btnLogin.css('pointer-events', 'auto').addClass('black').removeClass('red');
+                    $btnLogin.addClass('black').removeClass('red');
                 }, 1000);
             }
         },
-        changeBtnAddPro: function (type, id) {
+        changeBtnAddPro: function (type, id, call) {
             if (!_isAdmin) {
                 return;
             }
             var $btnAddPro = $('#' + id);
             $btnAddPro.css('border', 'none').css('outline', 'none')
-            var originText = $btnAddPro.text()
+            var originText = '确定'
             if (type === 'success') {
                 $btnAddPro.text('操作成功');
-                $btnAddPro.css('pointer-events', 'none').addClass('green').removeClass('black');
+                $btnAddPro.addClass('green').removeClass('black');
                 setTimeout(function () {
                     _showAddProDialog();
                     view.clearContView()
                     project.get(_curMenuId)
                     $btnAddPro.text(originText);
-                    $btnAddPro.css('pointer-events', 'auto').addClass('black').removeClass('green');
+                    $btnAddPro.addClass('black').removeClass('green');
+                    call && call()
                 }, 1000);
             }
             else {
                 $btnAddPro.text('请填写完整');
-                $btnAddPro.css('pointer-events', 'none').addClass('red').removeClass('black');
+                $btnAddPro.addClass('red').removeClass('black');
                 setTimeout(function () {
                     $btnAddPro.text(originText);
-                    $btnAddPro.css('pointer-events', 'auto').addClass('black').removeClass('red');
+                    $btnAddPro.addClass('black').removeClass('red');
+                    call && call()
                 }, 1000);
             }
         },
@@ -727,8 +753,11 @@
         $uploadBox.off('click').click(function () {
             if (breadCrumb.level === 1) {
                 var $projectCNName = $('[name=projectCNName]')
+                var $projectENName = $('[name=projectENName]')
                 $projectCNName.focus()
-                _showAddProDialog()
+                $projectCNName.val('')
+                $projectENName.val('')
+                addDialog.show('add')
             }
             else {
                 $fileupload.val("");

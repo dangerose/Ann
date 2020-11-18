@@ -553,11 +553,11 @@ body, html {
 .black {
     background-color: rgb(50, 50, 50);
     &:hover {
-        background-color: rgba(50, 50, 50, 0.8);
+        background-color: rgba(50, 50, 50, 0.8)!important;
         color: white;
     }
     &:focus {
-        background-color: rgba(50, 50, 50, 0.8);
+        background-color: rgba(50, 50, 50, 0.8)!important;
         color: white;
     }
 }
